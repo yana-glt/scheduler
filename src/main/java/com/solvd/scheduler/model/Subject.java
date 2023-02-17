@@ -42,6 +42,7 @@ public class Subject{
         return "Subject{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", teacher=" + teacher +
                 ", amountPerWeek=" + amountPerWeek +
                 '}';
     }

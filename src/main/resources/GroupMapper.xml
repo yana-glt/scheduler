@@ -25,13 +25,20 @@
         <id property="id" column="subject_id"/>
         <result property="name" column="subject_name"/>
         <result property="amountPerWeek" column="subject_amount_per_week"/>
+        <association property="teacher" resultMap="teacherResultMap"/>
+    </resultMap>
+
+    <resultMap id="teacherResultMap" type="com.solvd.scheduler.model.Teacher">
+        <id property="id" column="teacher_id"/>
+        <result property="name" column="teacher_name"/>
     </resultMap>
 
     <select id="getGroupsWithSubjects" resultMap="groupResultMap">
-        SELECT g.id, g.name, s.id as subject_id, s.name as subject_name, gs.amount_of_hours as subject_amount_per_week
+        SELECT g.id, g.name, s.id as subject_id, s.name as subject_name, gs.amount_of_hours as subject_amount_per_week, t.id as teacher_id, t.name as teacher_name
         FROM students_group g
         JOIN students_group_has_subject gs ON g.id = gs.students_group_id
         JOIN subject s ON gs.subject_id = s.id
+        JOIN teacher t ON s.teacher_id = t.id;
     </select>
 
 </mapper>
