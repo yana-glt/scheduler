@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solvd.scheduler.dao.interfaces.IGroupDAO">
+
+    <select id="getRecordById" resultMap="GroupResultMap">
+        SELECT
+            g.id, g.name
+        FROM students_group g WHERE id = #{id}
+    </select>
+
+    <resultMap id="GroupResultMap" type="com.solvd.scheduler.model.Group" autoMapping="false">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+    </resultMap>
+
+    <resultMap id="groupResultMap" type="com.solvd.scheduler.model.Group">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <collection property="subjectAmountPerWeek" ofType="com.solvd.scheduler.model.Subject" resultMap="subjectResultMap"/>
+    </resultMap>
+
+    <resultMap id="subjectResultMap" type="com.solvd.scheduler.model.Subject">
+        <id property="id" column="subject_id"/>
+        <result property="name" column="subject_name"/>
+        <result property="amountPerWeek" column="subject_amount_per_week"/>
+    </resultMap>
+
+    <select id="getGroupsWithSubjects" resultMap="groupResultMap">
+        SELECT g.id, g.name, s.id as subject_id, s.name as subject_name, gs.amount_of_hours as subject_amount_per_week
+        FROM students_group g
+        JOIN students_group_has_subject gs ON g.id = gs.students_group_id
+        JOIN subject s ON gs.subject_id = s.id
+    </select>
+
+</mapper>
