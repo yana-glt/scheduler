@@ -1,6 +1,9 @@
 package com.solvd.scheduler.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Group{
 
@@ -36,6 +39,16 @@ public class Group{
 
     public void setSubjectAmountPerWeek(Subject subject){
         subjectAmountPerWeek.put(subject, subject.getAmountPerWeek());
+    }
+
+    public List<Subject> getSubjectsAsList() {
+        ArrayList<Subject> subjectsTemp = new ArrayList<>();
+        for (Map.Entry<Subject, Integer> subjectEntry : subjectAmountPerWeek.entrySet()) {
+            for (int i = 0; i < subjectEntry.getValue(); i++) {
+                subjectsTemp.add(subjectEntry.getKey());
+            }
+        }
+        return subjectsTemp;
     }
 
     @Override
