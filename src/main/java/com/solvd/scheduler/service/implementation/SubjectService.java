@@ -18,22 +18,8 @@ public class SubjectService implements ISubjectService {
         try (SqlSession sqlSession = SESSION_FACTORY.openSession()) {
             ISubjectDAO subjectDAO = sqlSession.getMapper(ISubjectDAO.class);
             Subject subject = subjectDAO.getRecordById(1);
+            logger.info("The Subject class object with id " + id + "was retrieved from the database");
             return subject;
         }
-    }
-
-    @Override
-    public void insertRecord(Subject entity) {
-
-    }
-
-    @Override
-    public void updateRecord(Subject entity) {
-
-    }
-
-    @Override
-    public void deleteRecord(Subject entity) {
-
     }
 }

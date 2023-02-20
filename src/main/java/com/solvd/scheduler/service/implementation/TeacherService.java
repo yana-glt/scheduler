@@ -18,22 +18,8 @@ public class TeacherService  implements ITeacherService {
             try(SqlSession sqlSession = SESSION_FACTORY.openSession()) {
                 ITeacherDAO teacherDAO = sqlSession.getMapper(ITeacherDAO.class);
                 Teacher teacher = teacherDAO.getRecordById(1);
+                logger.info("The Teacher class object with id " + id + "was retrieved from the database");
                 return teacher;
             }
-        }
-
-        @Override
-        public void insertRecord(Teacher entity) {
-
-        }
-
-        @Override
-        public void updateRecord(Teacher entity) {
-
-        }
-
-        @Override
-        public void deleteRecord(Teacher entity) {
-
         }
 }

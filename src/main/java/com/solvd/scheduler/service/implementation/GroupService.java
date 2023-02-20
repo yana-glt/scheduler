@@ -8,42 +8,29 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.util.List;
 
 public class GroupService implements IGroupService {
     private final static Logger logger = LogManager.getLogger(GroupService.class);
     private static final SqlSessionFactory SESSION_FACTORY = MyBatisDAOFactory.getSqlSessionFactory();
+
     @Override
     public Group getRecordById(long id) {
-        try(SqlSession sqlSession = SESSION_FACTORY.openSession()) {
+        try (SqlSession sqlSession = SESSION_FACTORY.openSession()) {
             IGroupDAO groupDAO = sqlSession.getMapper(IGroupDAO.class);
             Group group = groupDAO.getRecordById(1);
+            logger.info("The Group class object with id " + id + "was retrieved from the database");
             return group;
         }
     }
 
     @Override
     public List<Group> groupsAndTheirSubjectWithTimePerWeek() {
-        SqlSessionFactory sqlSessionFactory = MyBatisDAOFactory.getSqlSessionFactory();
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        IGroupDAO IGroupDAO = sqlSession.getMapper(IGroupDAO.class);
-        List<Group> groupsAndTheirSubjectWithTimePerWeek = IGroupDAO.getGroupsWithSubjects();
-        return groupsAndTheirSubjectWithTimePerWeek;
-    }
-
-    @Override
-    public void insertRecord(Group entity) {
-
-    }
-
-    @Override
-    public void updateRecord(Group entity) {
-
-    }
-
-    @Override
-    public void deleteRecord(Group entity) {
-
+        try (SqlSession sqlSession = SESSION_FACTORY.openSession()) {
+            IGroupDAO IGroupDAO = sqlSession.getMapper(IGroupDAO.class);
+            List<Group> groupsAndTheirSubjectWithTimePerWeek = IGroupDAO.getGroupsWithSubjects();
+            logger.info("The List<Group> object was retrieved from the database");
+            return groupsAndTheirSubjectWithTimePerWeek;
+        }
     }
 }
