@@ -10,9 +10,9 @@ public class ScannerUtils {
         boolean valid = answer >= comparativeNumber1 && answer <= comparativeNumber2;
         if (!(valid)) {
             if (comparativeNumber1 == comparativeNumber2) {
-                throw new InputException(String.format("\nYou can only select %d lessons per day", comparativeNumber1), new IOException());
+                throw new InputException(String.format("\nYou can only select %d lessons per day", comparativeNumber1), new IOException(), answer);
             } else {
-                throw new InputException(String.format("\nYou can only select integer numbers from %d to %d", comparativeNumber1, comparativeNumber2), new IOException());
+                throw new InputException(String.format("\nYou can only select integer numbers from %d to %d", comparativeNumber1, comparativeNumber2), new IOException(), answer);
             }
         }
     }

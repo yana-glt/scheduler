@@ -35,21 +35,17 @@ public class TerminalInputInfo {
         }
         Scanner scanner = new Scanner(System.in);
         if (!(scanner.hasNextInt())) {
-            logger.error("Exception: Invalid characters were entered in the field.");
+            logger.error(String.format("Exception: The entered data \"%s\" does not match the condition", scanner.next()));
             System.out.println("Exception: You entered invalid values. Try again!");
             getAmountOfWorkingDaysPerAWeek(groups);
         } else {
             int answer = scanner.nextInt();
             try {
-                try {
-                    ScannerUtils.checkCorrectValue(answer, getMinAmountOfWorkingDaysPerWeek(groups), MAX_AMOUNT_OF_WORKING_DAYS_PER_WEEK);
-                } catch (InputException e) {
-                    throw new RuntimeException(e);
-                }
+                ScannerUtils.checkCorrectValue(answer, getMinAmountOfWorkingDaysPerWeek(groups), MAX_AMOUNT_OF_WORKING_DAYS_PER_WEEK);
                 amountOfWorkingDaysPerAWeek = answer;
                 logger.info("Accepted number of working days is " + amountOfWorkingDaysPerAWeek);
-            } catch (Exception e) {
-                System.out.println("Problem occurred: " + e);
+            } catch (Exception | InputException e) {
+                System.out.println("Problem occurred: Invalid characters were entered in the field");
                 getAmountOfWorkingDaysPerAWeek(groups);
             }
         }
@@ -65,21 +61,17 @@ public class TerminalInputInfo {
         }
         Scanner sc = new Scanner(System.in);
         if (!(sc.hasNextInt())) {
-            logger.error("Exception: Invalid characters were entered in the field.");
+            logger.error(String.format("Exception: The entered data \"%s\" does not match the condition\"", sc.next()));
             System.out.println("Exception: You entered invalid values. Try again!");
             getMaxNumberOfLessonsPerDay(groups);
         } else {
             int answer = Integer.parseInt(sc.next());
             try {
-                try {
-                    ScannerUtils.checkCorrectValue(answer, getMinPossibleLessonsPerDay(groups), MAX_NUM_OF_SLOTS_PER_DAY);
-                } catch (InputException e) {
-                    throw new RuntimeException(e);
-                }
+                ScannerUtils.checkCorrectValue(answer, getMinPossibleLessonsPerDay(groups), MAX_NUM_OF_SLOTS_PER_DAY);
                 maxNumberOfLessonsPerDay = answer;
                 logger.info("Accepted number of maximum lessons is " + maxNumberOfLessonsPerDay);
-            } catch (Exception e) {
-                System.out.println("Problem occurred: " + e);
+            } catch (Exception | InputException e) {
+                System.out.println("Problem occurred: Invalid characters were entered in the field.");
                 getMaxNumberOfLessonsPerDay(groups);
             }
         }
@@ -95,21 +87,18 @@ public class TerminalInputInfo {
         }
         Scanner scan = new Scanner(System.in);
         if (!(scan.hasNextInt())) {
-            logger.error("Exception: Invalid characters were entered in the field.");
+            logger.error(String.format("Exception: The entered data \"%s\" does not match the condition\"", scan.next()));
             System.out.println("Exception: You entered invalid values. Try again!");
             getMinNumberOfLessonsPerDay(groups);
         } else {
             int answer = scan.nextInt();
             try {
-                try {
-                    ScannerUtils.checkCorrectValue(answer, getMinPossibleLessonsPerDay(groups), maxLessonsPerDay);
-                } catch (InputException e) {
-                    throw new RuntimeException(e);
-                }
+                ScannerUtils.checkCorrectValue(answer, getMinPossibleLessonsPerDay(groups), maxLessonsPerDay);
+
                 minNumberOfLessonsPerDay = answer;
                 logger.info("Accepted number of minimum lessons is " + minNumberOfLessonsPerDay);
-            } catch (Exception e) {
-                System.out.println("Problem occurred: " + e);
+            } catch (Exception | InputException e) {
+                System.out.println("Problem occurred: Invalid characters were entered in the field.");
                 getMinNumberOfLessonsPerDay(groups);
             }
         }
