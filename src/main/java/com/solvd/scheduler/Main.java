@@ -3,7 +3,6 @@ package com.solvd.scheduler;
 import com.solvd.scheduler.dao.interfaces.IGroupDAO;
 import com.solvd.scheduler.model.Group;
 import com.solvd.scheduler.util.MyBatisDAOFactory;
-import com.solvd.scheduler.util.Schedule;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.logging.log4j.LogManager;
@@ -22,11 +21,11 @@ public class Main{
         IGroupDAO IGroupDAO = sqlSession.getMapper(IGroupDAO.class);
         //Group group = IGroupDAO.getRecordById(5);
         List<Group> groupsAndTheirSubjectWithTimePerWeek = IGroupDAO.getGroupsWithSubjects();
-        /*for (Group g : groupsAndTheirSubjectWithTimePerWeek){
+        for (Group g : groupsAndTheirSubjectWithTimePerWeek){
             System.out.println(g.toString());
             System.out.println(g.getSubjectAmountPerWeek().keySet().stream().collect(Collectors.toList()));
-        }*/
-        System.out.println(Schedule.minDaysToSatisfySchedule(groupsAndTheirSubjectWithTimePerWeek));
+        }
+
     }
 
 }
