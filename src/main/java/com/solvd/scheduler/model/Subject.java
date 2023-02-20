@@ -1,9 +1,13 @@
 package com.solvd.scheduler.model;
 
 public class Subject{
+
     private long id;
+
     private String name;
+
     private Teacher teacher;
+
     private int amountPerWeek;
 
     public long getId(){
@@ -33,17 +37,16 @@ public class Subject{
     public int getAmountPerWeek(){
         return amountPerWeek;
     }
+
     public void setAmountPerWeek(int amountPerWeek){
         this.amountPerWeek = amountPerWeek;
     }
 
     @Override
     public String toString(){
-        return "Subject{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", teacher=" + teacher +
-                ", amountPerWeek=" + amountPerWeek +
-                '}';
+        return String.format("Subject{id= %d, name = %s,teacher= %s, amountPerWeek= %d}", id,
+                name, teacher, amountPerWeek);
+
     }
+
 }

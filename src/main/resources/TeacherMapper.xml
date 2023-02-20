@@ -5,9 +5,9 @@
 <mapper namespace="com.solvd.scheduler.dao.interfaces.ITeacherDAO">
 
     <select id="getRecordById" resultMap="TeacherResultMap">
-        SELECT
-        *
-        FROM teacher WHERE id = #{id}
+        SELECT *
+        FROM teacher
+        WHERE id = #{id}
     </select>
 
     <resultMap id="TeacherResultMap" type="com.solvd.scheduler.model.Teacher" autoMapping="false">
