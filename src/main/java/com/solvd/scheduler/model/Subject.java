@@ -46,7 +46,6 @@ public class Subject{
     public String toString(){
         return String.format("Subject{id= %d, name = %s,teacher= %s, amountPerWeek= %d}", id,
                 name, teacher, amountPerWeek);
-
     }
 
 }
