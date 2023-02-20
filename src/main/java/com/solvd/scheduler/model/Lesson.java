@@ -38,9 +38,10 @@ public class Lesson implements Comparable<Lesson> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Lesson lesson)) return false;
-        return lessonId == lesson.lessonId && subject.equals(lesson.subject) && group.equals(lesson.group)
-                && Objects.equals(timeslot, lesson.timeslot);
+        if (!(o instanceof Lesson)) return false;
+        Lesson lesson = (Lesson) o;
+        return lessonId == lesson.lessonId && Objects.equals(subject, lesson.subject)
+                && Objects.equals(group, lesson.group) && Objects.equals(timeslot, lesson.timeslot);
     }
 
     @Override

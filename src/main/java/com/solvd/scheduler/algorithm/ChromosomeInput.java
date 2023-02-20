@@ -1,6 +1,10 @@
 package com.solvd.scheduler.algorithm;
 
-import com.solvd.scheduler.model.*;
+import com.solvd.scheduler.model.Group;
+import com.solvd.scheduler.model.Timeslot;
+import com.solvd.scheduler.model.Weekday;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,13 +18,17 @@ public class ChromosomeInput {
     public static int numSchoolDays;
     public static int minLessons;
     public static int maxLessons;
+    private final static Logger logger = LogManager.getLogger(ChromosomeInput.class);
 
     public ChromosomeInput(List<Group> groupList, int numSchoolDays, int minLessons, int maxLessons) {
         this.groups = groupList;
-        this.timeslots = generateTimeSlots(numSchoolDays, SCHOOL_WORKING_HOURS);
+        this.timeslots = generateTimeSlots(numSchoolDays);
         ChromosomeInput.numSchoolDays = numSchoolDays;
         ChromosomeInput.minLessons = minLessons;
         ChromosomeInput.maxLessons = maxLessons;
+        logger.info(String.format("Collected chromosome info for %d groups with %d random timeslots [%d working days," +
+                        " min lessons per day: %d, max lessons per day: %d]",
+                groupList.size(), timeslots.size(), numSchoolDays, minLessons, maxLessons));
     }
 
     public List<Group> getGroups() {
@@ -31,16 +39,18 @@ public class ChromosomeInput {
         return timeslots.get((int) (timeslots.size() * Math.random()));
     }
 
-    private List<Timeslot> generateTimeSlots( int numberOfDays, int numberOfHours) {
+    private List<Timeslot> generateTimeSlots(int numberOfDays) {
         Weekday[] days = Arrays.copyOfRange(Weekday.values(), 0, numberOfDays);
         int id = 1;
         List<Timeslot> slots = new ArrayList<>();
         for (Weekday day : days) {
-            for (int k = 1; k < numberOfHours + 1; k++) {
+            for (int k = 1; k < SCHOOL_WORKING_HOURS + 1; k++) {
                 slots.add(new Timeslot(id, day, k));
                 id++;
             }
         }
+        logger.debug(String.format("Generated list of %d timeslots [for %d working days, number of school working hours: %d]",
+                slots.size(), numberOfDays, SCHOOL_WORKING_HOURS));
         return slots;
     }
 }

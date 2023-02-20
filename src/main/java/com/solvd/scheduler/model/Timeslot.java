@@ -28,8 +28,9 @@ public class Timeslot implements Comparable<Timeslot> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Timeslot timeslot)) return false;
-        return slot == timeslot.slot && day == timeslot.day;
+        if (!(o instanceof Timeslot)) return false;
+        Timeslot timeslot = (Timeslot) o;
+        return id == timeslot.id && slot == timeslot.slot && day == timeslot.day;
     }
 
     @Override

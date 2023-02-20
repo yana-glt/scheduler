@@ -1,15 +1,22 @@
 package com.solvd.scheduler.algorithm;
 
 import com.solvd.scheduler.model.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Individual implements Comparable<Individual> {
+    private int individualId;
     private final List<Lesson> chromosome;
     private double mandatoryFitness = -1;
     private double optionalFitness = -1;
+    private static int count = 1;
+    private final static Logger logger = LogManager.getLogger(Individual.class);
 
     public Individual(ChromosomeInput chromosomeInput) {
+        individualId = count++;
         chromosome = new ArrayList<>();
         int id = 0;
         for (Group group : chromosomeInput.getGroups()) {
@@ -18,12 +25,17 @@ public class Individual implements Comparable<Individual> {
                 id++;
             }
         }
+        logger.trace(String.format("Created a individual [%d] with %d lessons", individualId, chromosome.size()));
     }
 
     public Individual(List<Lesson> chromosome) {
         this.chromosome = chromosome;
         this.calculateMandatoryFitness();
         this.calculateOptionalFitness();
+    }
+
+    public int getIndividualId() {
+        return individualId;
     }
 
     public List<Lesson> getChromosome() {
@@ -35,7 +47,10 @@ public class Individual implements Comparable<Individual> {
     }
 
     public void setGene(int offset, Timeslot timeslot) {
-        this.chromosome.get(offset).setTimeslot(timeslot);
+        Lesson lesson = this.chromosome.get(offset);
+        lesson.setTimeslot(timeslot);
+        logger.trace(String.format("[individual %d] set %s [lesson id: %d group: %s subject: %s]",
+                individualId, timeslot, lesson.getLessonId(), lesson.getGroup().getName(), lesson.getSubject().getName()));
     }
 
     public Timeslot getGene(int offset) {
@@ -59,28 +74,35 @@ public class Individual implements Comparable<Individual> {
                     .stream()
                     .map(p -> p.getGroup().getId())
                     .distinct()
-                    .toList();
+                    .collect(Collectors.toList());
 
             for (long id : groupIds) {
                 List<Lesson> lessons = chromosome
                         .stream()
                         .filter(p -> p.getGroup().getId() == id)
-                        .toList();
+                        .collect(Collectors.toList());
 
                 for (Weekday day : days) {
-                    List<Lesson> lessonsOnDaySorted = lessons.stream().filter(p -> p.getTimeslot().getDay().equals(day))
-                            .sorted().toList();
+                    List<Lesson> lessonsOnDaySorted = lessons
+                            .stream()
+                            .filter(p -> p.getTimeslot().getDay().equals(day))
+                            .sorted()
+                            .collect(Collectors.toList());
+
                     if (lessonsOnDaySorted.size() > 1) {
                         for (int i = 0; i < lessonsOnDaySorted.size() - 1; i++) {
                             int difference = lessonsOnDaySorted.get(i + 1).getTimeslot().getSlot() - lessonsOnDaySorted.get(i).getTimeslot().getSlot();
                             if (difference > 1) {
                                 gap++;
+                                logger.trace(String.format("GAP [individual %d] for groups between: [%s] and [%s]",
+                                        individualId, lessonsOnDaySorted.get(i), lessonsOnDaySorted.get(i + 1)));
                             }
                         }
                     }
                 }
             }
         }
+        logger.debug(String.format("[individual %d] calculated total number of gaps for groups: %d", individualId, gap));
         return gap;
     }
 
@@ -93,41 +115,48 @@ public class Individual implements Comparable<Individual> {
                     .stream()
                     .map(p -> p.getSubject().getId())
                     .distinct()
-                    .toList();
+                    .collect(Collectors.toList());
 
             for (long id : subjectIds) {
                 List<Lesson> lessons = chromosome
                         .stream()
                         .filter(p -> p.getSubject().getId() == id)
-                        .toList();
+                        .collect(Collectors.toList());
 
                 for (Weekday day : days) {
                     List<Lesson> lessonsOnDaySorted = lessons
                             .stream()
                             .filter(p -> p.getTimeslot().getDay().equals(day))
                             .sorted(Comparator.comparing(o -> (o.getTimeslot().getSlot())))
-                            .toList();
+                            .collect(Collectors.toList());
 
                     if (lessonsOnDaySorted.size() > 1) {
                         for (int i = 0; i < lessonsOnDaySorted.size() - 1; i++) {
                             int difference = lessonsOnDaySorted.get(i + 1).getTimeslot().getSlot() - lessonsOnDaySorted.get(i).getTimeslot().getSlot();
                             if (difference > 1) {
                                 gap++;
+                                logger.trace(String.format("GAP [individual %d] for teachers between: [%s] and [%s]",
+                                        individualId, lessonsOnDaySorted.get(i), lessonsOnDaySorted.get(i + 1)));
                             }
                         }
                     }
                 }
             }
         }
+        logger.debug(String.format("[individual %d] calculated total number of gaps for teachers: %d", individualId, gap));
         return gap;
     }
 
     public void calculateMandatoryFitness() {
         this.mandatoryFitness = 1 / (double) (this.calculateConflicts() + 1);
+        logger.debug(String.format("[individual %d] calculated mandatory fitness: %f",
+                individualId, this.mandatoryFitness));
     }
 
     public void calculateOptionalFitness() {
         this.optionalFitness = 1 / (double) (this.calculateGapsForGroups() + calculateGapsForTeachers() + 1);
+        logger.debug(String.format("[individual %d] calculated optional fitness: %f",
+                individualId, this.optionalFitness));
     }
 
     public int calculateConflicts() {
@@ -140,6 +169,8 @@ public class Individual implements Comparable<Individual> {
                             && l1.getTimeslot().getId() == l2.getTimeslot().getId()
                             && l1.getLessonId() != l2.getLessonId()) {
                         conflict++;
+                        logger.trace(String.format("CONFLICT [individual id: %d] time overlap [subjects] between: [%s] and [%s]",
+                                individualId, l1, l2));
                     }
                 }
 
@@ -148,6 +179,8 @@ public class Individual implements Comparable<Individual> {
                             && l1.getTimeslot().getId() == l2.getTimeslot().getId()
                             && l1.getLessonId() != l2.getLessonId()) {
                         conflict++;
+                        logger.trace(String.format("CONFLICT [individual %d] time overlap [groups] between: [%s] and [%s]",
+                                individualId, l1, l2));
                     }
                 }
             }
@@ -157,13 +190,13 @@ public class Individual implements Comparable<Individual> {
                     .stream()
                     .map(p -> p.getGroup().getId())
                     .distinct()
-                    .toList();
+                    .collect(Collectors.toList());
 
             for (long id : groupIds) {
                 List<Lesson> lessons = chromosome
                         .stream()
                         .filter(p -> p.getGroup().getId() == id)
-                        .toList();
+                        .collect(Collectors.toList());
 
                 for (Weekday day : days) {
                     int numLessonsPerDay = (int) lessons
@@ -171,12 +204,18 @@ public class Individual implements Comparable<Individual> {
                             .filter(p -> p.getTimeslot().getDay().equals(day))
                             .count();
 
-                    if (numLessonsPerDay < ChromosomeInput.minLessons) {
-                        conflict++;
-                    }
+                    if (numLessonsPerDay > 0) {
+                        if (numLessonsPerDay < ChromosomeInput.minLessons) {
+                            conflict++;
+                            logger.trace(String.format("CONFLICT [individual %d] Min num of lessons not satisfied for group[%d] " +
+                                    "on %s. Calculated num of hours: %d", individualId, id, day, numLessonsPerDay));
+                        }
 
-                    if (numLessonsPerDay > ChromosomeInput.maxLessons) {
-                        conflict++;
+                        if (numLessonsPerDay > ChromosomeInput.maxLessons) {
+                            conflict++;
+                            logger.trace(String.format("CONFLICT [individual %d] Max num of lessons not satisfied for group[%d] " +
+                                    "on %s. Calculated num of hours: %d", individualId, id, day, numLessonsPerDay));
+                        }
                     }
                 }
             }
@@ -187,13 +226,13 @@ public class Individual implements Comparable<Individual> {
                         .filter(p -> p.getGroup().getId() == groupId)
                         .distinct()
                         .map(Lesson::getGroup)
-                        .toList()
+                        .collect(Collectors.toList())
                         .get(0);
 
                 List<Lesson> lessonsForGivenGroup = chromosome
                         .stream()
                         .filter(p -> p.getGroup().getId() == groupId)
-                        .toList();
+                        .collect(Collectors.toList());
 
                 for (Map.Entry<Subject, Integer> entry : group.getSubjectAmountPerWeek().entrySet()) {
                     Subject subject = entry.getKey();
@@ -208,6 +247,10 @@ public class Individual implements Comparable<Individual> {
                                     .count();
                             if (numHoursOfSubjectOnGivenDay > 1) {
                                 conflict++;
+                                logger.trace(String.format("CONFLICT [individual %d] Subject distribution conflict: " +
+                                                "too many lessons of %s for group[%d] on %s. Should be [0 - 1] Calculated num" +
+                                                " of lessons: %d",
+                                        individualId, subject.getName(), groupId, day, numHoursOfSubjectOnGivenDay));
                             }
                         }
                     } else {
@@ -220,12 +263,18 @@ public class Individual implements Comparable<Individual> {
                                     .count();
                             if (numHoursOfSubjectOnGivenDay < minHours || numHoursOfSubjectOnGivenDay > maxHours) {
                                 conflict++;
+                                logger.trace(String.format("CONFLICT [individual %d] Subject distribution conflict: " +
+                                                "invalid number of lessons of %s for group[%d] on %s." +
+                                                " Should be [%d - %d]. Calculated num of lessons: %d",
+                                        individualId, subject.getName(), groupId, day, minHours, maxHours, numHoursOfSubjectOnGivenDay));
                             }
                         }
                     }
                 }
             }
         }
+        logger.debug(String.format("[individual %d] calculated total number of conflicts for groups + teachers: %d",
+                individualId, conflict));
         return conflict;
     }
 
