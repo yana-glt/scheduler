@@ -1,5 +1,7 @@
 package com.solvd.scheduler;
 
+import com.solvd.scheduler.algorithm.IScheduleGenerate;
+import com.solvd.scheduler.algorithm.ScheduleGenerator;
 import com.solvd.scheduler.model.Group;
 import com.solvd.scheduler.service.implementation.GroupService;
 import com.solvd.scheduler.service.interfaces.IGroupService;
@@ -12,6 +14,9 @@ import java.util.stream.Collectors;
 public class Main{
 
     private final static Logger logger = LogManager.getLogger(Main.class.getName());
+    private static final int NUM_DAYS = 5;
+    private static final int MIN_LESSONS = 2;
+    private static final int MAX_LESSONS = 8;
 
     public static void main(String[] args){
         logger.info("Check logger");
@@ -21,6 +26,9 @@ public class Main{
             System.out.println(g.toString());
             System.out.println(g.getSubjectAmountPerWeek().keySet().stream().collect(Collectors.toList()));
         }
+        System.out.println();
+        IScheduleGenerate sg = new ScheduleGenerator(groupsAndTheirSubjectWithTimePerWeek, NUM_DAYS,MIN_LESSONS,MAX_LESSONS);
+        ScheduleGenerator.print(sg.compute());
     }
 
 }
