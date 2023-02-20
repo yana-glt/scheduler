@@ -1,6 +1,6 @@
 package com.solvd.scheduler.service.interfaces;
 
-public interface IBaseService <T>{
+public interface IBaseService<T>{
 
     T getRecordById(long id);
 
@@ -9,4 +9,5 @@ public interface IBaseService <T>{
     void updateRecord(T entity);
 
     void deleteRecord(T entity);
+
 }

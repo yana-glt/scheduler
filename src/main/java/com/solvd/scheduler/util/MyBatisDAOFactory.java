@@ -13,19 +13,22 @@ import java.io.Reader;
 public class MyBatisDAOFactory{
 
     private final static Logger log = LogManager.getLogger(MyBatisDAOFactory.class);
+
     private final static MyBatisDAOFactory myBatisDaoFactory = new MyBatisDAOFactory();
+
     private static SqlSessionFactory sqlSessionFactory;
 
-    private MyBatisDAOFactory() {
-        try {
+    private MyBatisDAOFactory(){
+        try{
             Reader reader = Resources.getResourceAsReader("mybatis-config.xml");
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
-        } catch (IOException e) {
+        } catch (IOException e){
             log.error("Exception while reading configuration", e);
         }
     }
 
-    public static SqlSessionFactory getSqlSessionFactory() {
+    public static SqlSessionFactory getSqlSessionFactory(){
         return sqlSessionFactory;
     }
+
 }

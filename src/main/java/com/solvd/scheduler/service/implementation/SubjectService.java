@@ -9,13 +9,15 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class SubjectService implements ISubjectService {
+public class SubjectService implements ISubjectService{
+
     private final static Logger logger = LogManager.getLogger(SubjectService.class);
+
     private static final SqlSessionFactory SESSION_FACTORY = MyBatisDAOFactory.getSqlSessionFactory();
 
     @Override
-    public Subject getRecordById(long id) {
-        try (SqlSession sqlSession = SESSION_FACTORY.openSession()) {
+    public Subject getRecordById(long id){
+        try (SqlSession sqlSession = SESSION_FACTORY.openSession()){
             ISubjectDAO subjectDAO = sqlSession.getMapper(ISubjectDAO.class);
             Subject subject = subjectDAO.getRecordById(1);
             return subject;
@@ -23,17 +25,18 @@ public class SubjectService implements ISubjectService {
     }
 
     @Override
-    public void insertRecord(Subject entity) {
+    public void insertRecord(Subject entity){
 
     }
 
     @Override
-    public void updateRecord(Subject entity) {
+    public void updateRecord(Subject entity){
 
     }
 
     @Override
-    public void deleteRecord(Subject entity) {
+    public void deleteRecord(Subject entity){
 
     }
+
 }
