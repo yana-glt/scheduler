@@ -14,6 +14,7 @@ public class Main{
     private final static Logger logger = LogManager.getLogger(Main.class.getName());
 
     public static void main(String[] args){
+        logger.info("Check logger");
         IGroupService groupService = new GroupService();
         List<Group> groupsAndTheirSubjectWithTimePerWeek = groupService.groupsAndTheirSubjectWithTimePerWeek();
         for (Group g : groupsAndTheirSubjectWithTimePerWeek){
