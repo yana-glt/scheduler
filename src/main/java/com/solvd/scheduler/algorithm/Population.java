@@ -19,7 +19,7 @@ public class Population {
         for (int i = 0; i < populationSize; i++) {
             this.population.add(new Individual(chromosomeInput));
         }
-        logger.info(String.format("Initialized population of %d individuals", populationSize));
+        logger.info(String.format("Population init with %d individuals", populationSize));
         individualsWithMandatoryFitnessSatisfied = new ArrayList<>();
     }
 

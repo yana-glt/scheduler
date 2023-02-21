@@ -19,60 +19,79 @@ public class ScheduleGenerator implements IScheduleGenerate {
     }
 
     public List<Lesson> compute() {
-        System.out.println("=============  Generation of schedule started - please wait  =============");
-        int generation = 1;
 
-        Population population = new Population(POPULATION_SIZE, this.chromosomeInput);
-        population.evaluate();
-        logGenerationInfo(generation, population);
+        if (chromosomeInput.getGroups().size() > 0) {
+            Integer totalAmountOfLessons = chromosomeInput.getGroups()
+                    .stream()
+                    .map(p -> p.getSubjectsAsList().size())
+                    .reduce(0, Integer::sum);
 
-        while (generation < MAX_GENERATIONS &&
-                (population.getIndividual(0).getMandatoryFitness() < 1 || population.getIndividual(0).getOptionalFitness() < 1)) {
-            generation++;
+            if (totalAmountOfLessons > 0) {
 
-            population.crossover();
-            population.mutate();
-            population.evaluate();
+                Population population = new Population(POPULATION_SIZE, this.chromosomeInput);
 
-            if (population.getIndividual(0).getMandatoryFitness() == 1) {
-                population.addGoodIndividual(population.getIndividual(0));
-            }
+                System.out.println("=============  Generation of schedule started - please wait  =============");
+                int generation = 1;
 
-            logGenerationInfo(generation, population);
-        }
+                population.evaluate();
 
-        Individual resultIndividual;
+                if (population.getIndividual(0).getMandatoryFitness() == 1) {
+                    population.addGoodIndividual(population.getIndividual(0));
+                }
+                logGenerationInfo(generation, population);
 
-        if (population.getIndividual(0).getOptionalFitness() < 1) {
-            System.out.println("NOT POSSIBLE TO CREATE SCHEDULE WITHOUT GAPS.");
-            logger.info("Not possible to create a schedule satisfying optional requirements.");
-            if (population.getIndividualsWithMandatoryFitnessSatisfied().size() == 0) {
-                System.out.println("NOT POSSIBLE TO CREATE SCHEDULE WITH GAPS AND EQUAL DISTRIBUTION OF SUBJECTS EITHER.");
-                logger.info("Not possible to create a schedule satisfying mandatory requirements.");
+                while (generation < MAX_GENERATIONS &&
+                        (population.getIndividual(0).getMandatoryFitness() < 1 || population.getIndividual(0).getOptionalFitness() < 1)) {
+                    generation++;
+
+                    population.crossover();
+                    population.mutate();
+                    population.evaluate();
+
+                    if (population.getIndividual(0).getMandatoryFitness() == 1) {
+                        population.addGoodIndividual(population.getIndividual(0));
+                    }
+
+                    logGenerationInfo(generation, population);
+                }
+
+                if (population.getIndividualsWithMandatoryFitnessSatisfied().size() == 0) {
+                    System.out.println("Sorry, schedule satisfying mandatory requirements can't be generated. " +
+                            "Please check input info and number of lessons in DB");
+                    logger.info("Not possible to create a schedule satisfying mandatory requirements.");
+                    return null;
+                } else {
+                    Collections.sort(population.getIndividualsWithMandatoryFitnessSatisfied());
+                    logger.debug("List of individuals with mandatory fitness satisfied sorted based on optional fitness");
+                    Individual resultIndividual = population.getIndividualsWithMandatoryFitnessSatisfied().get(0);
+                    logger.info(String.format("Chosen individual[%d] with mandatory fitness satisfied and best optional fitness [%.19f]",
+                            resultIndividual.getIndividualId(), resultIndividual.getOptionalFitness()));
+
+                    logger.info(String.format("Schedule created [mandatory fitness: %.1f and optional fitness: %.19f] [individual id: %d]",
+                            resultIndividual.getMandatoryFitness(), resultIndividual.getOptionalFitness(), resultIndividual.getIndividualId()));
+
+                    System.out.println("Final solution:");
+                    System.out.println("-> Mandatory Fitness: " + resultIndividual.getMandatoryFitness());
+                    System.out.println("-> Optional Fitness: " + resultIndividual.getOptionalFitness());
+                    System.out.println("-> Conflicts: " + resultIndividual.calculateConflicts());
+                    System.out.println("-> Gaps in schedule for groups: " + resultIndividual.calculateGapsForGroups());
+                    System.out.println("-> Gaps in schedule for teachers: " + resultIndividual.calculateGapsForTeachers());
+
+                    return resultIndividual.getChromosome();
+                }
+            } else {
+                logger.info("Schedule not generated - no subjects to allocate");
+                System.out.println("Schedule can't be generated. No subjects to allocate. " +
+                        "Please check if groups have subject assigned in DB.");
                 return null;
             }
-            Collections.sort(population.getIndividualsWithMandatoryFitnessSatisfied());
-            logger.debug("List of individuals with mandatory fitness satisfied sorted based on optional fitness");
-            resultIndividual = population.getIndividualsWithMandatoryFitnessSatisfied().get(0);
-            logger.info(String.format("Chosen individual[%d] with mandatory fitness satisfied and best optional fitness [%.19f]",
-                    resultIndividual.getIndividualId(), resultIndividual.getOptionalFitness()));
-
         } else {
-            resultIndividual = population.getIndividual(0);
-            logger.info(String.format("Chosen individual[%d] with both mandatory and optional fitness satisfied",
-                    resultIndividual.getIndividualId()));
+            logger.info("Schedule not generated - no groups available");
+            System.out.println("Schedule can't be generated. No groups available. " +
+                    "Please check if have any groups in DB.");
+            return null;
         }
-        logger.info(String.format("Schedule created [mandatory fitness: %.1f and optional fitness: %.19f] [individual id: %d]",
-                resultIndividual.getMandatoryFitness(), resultIndividual.getOptionalFitness(), resultIndividual.getIndividualId()));
 
-        System.out.println("Final solution:");
-        System.out.println("-> Mandatory Fitness: " + resultIndividual.getMandatoryFitness());
-        System.out.println("-> Optional Fitness: " + resultIndividual.getOptionalFitness());
-        System.out.println("-> Conflicts: " + resultIndividual.calculateConflicts());
-        System.out.println("-> Gaps in schedule for groups: " + resultIndividual.calculateGapsForGroups());
-        System.out.println("-> Gaps in schedule for teachers: " + resultIndividual.calculateGapsForTeachers());
-
-        return resultIndividual.getChromosome();
     }
 
     private void logGenerationInfo(int generation, Population population) {
