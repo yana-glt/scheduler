@@ -44,7 +44,7 @@ public class TerminalInputInfo {
                 ScannerUtils.checkCorrectValue(answer, getMinAmountOfWorkingDaysPerWeek(groups), MAX_AMOUNT_OF_WORKING_DAYS_PER_WEEK);
                 amountOfWorkingDaysPerAWeek = answer;
                 logger.info("Accepted number of working days is " + amountOfWorkingDaysPerAWeek);
-            } catch (Exception | InputException e) {
+            } catch (InputException e) {
                 System.out.println("Problem occurred: Invalid characters were entered in the field");
                 getAmountOfWorkingDaysPerAWeek(groups);
             }
@@ -70,7 +70,7 @@ public class TerminalInputInfo {
                 ScannerUtils.checkCorrectValue(answer, getMinPossibleLessonsPerDay(groups), MAX_NUM_OF_SLOTS_PER_DAY);
                 maxNumberOfLessonsPerDay = answer;
                 logger.info("Accepted number of maximum lessons is " + maxNumberOfLessonsPerDay);
-            } catch (Exception | InputException e) {
+            } catch (InputException e) {
                 System.out.println("Problem occurred: Invalid characters were entered in the field.");
                 getMaxNumberOfLessonsPerDay(groups);
             }
@@ -97,7 +97,7 @@ public class TerminalInputInfo {
 
                 minNumberOfLessonsPerDay = answer;
                 logger.info("Accepted number of minimum lessons is " + minNumberOfLessonsPerDay);
-            } catch (Exception | InputException e) {
+            } catch (InputException e) {
                 System.out.println("Problem occurred: Invalid characters were entered in the field.");
                 getMinNumberOfLessonsPerDay(groups);
             }
