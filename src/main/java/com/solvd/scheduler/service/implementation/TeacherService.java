@@ -9,31 +9,34 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class TeacherService  implements ITeacherService {
-        private final static Logger logger = LogManager.getLogger(TeacherService.class);
-        private static final SqlSessionFactory SESSION_FACTORY = MyBatisDAOFactory.getSqlSessionFactory();
+public class TeacherService implements ITeacherService{
 
-        @Override
-        public Teacher getRecordById(long id) {
-            try(SqlSession sqlSession = SESSION_FACTORY.openSession()) {
-                ITeacherDAO teacherDAO = sqlSession.getMapper(ITeacherDAO.class);
-                Teacher teacher = teacherDAO.getRecordById(1);
-                return teacher;
-            }
+    private final static Logger logger = LogManager.getLogger(TeacherService.class);
+
+    private static final SqlSessionFactory SESSION_FACTORY = MyBatisDAOFactory.getSqlSessionFactory();
+
+    @Override
+    public Teacher getRecordById(long id){
+        try (SqlSession sqlSession = SESSION_FACTORY.openSession()){
+            ITeacherDAO teacherDAO = sqlSession.getMapper(ITeacherDAO.class);
+            Teacher teacher = teacherDAO.getRecordById(1);
+            return teacher;
         }
+    }
 
-        @Override
-        public void insertRecord(Teacher entity) {
+    @Override
+    public void insertRecord(Teacher entity){
 
-        }
+    }
 
-        @Override
-        public void updateRecord(Teacher entity) {
+    @Override
+    public void updateRecord(Teacher entity){
 
-        }
+    }
 
-        @Override
-        public void deleteRecord(Teacher entity) {
+    @Override
+    public void deleteRecord(Teacher entity){
 
-        }
+    }
+
 }

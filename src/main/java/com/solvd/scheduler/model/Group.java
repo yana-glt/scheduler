@@ -3,9 +3,13 @@ package com.solvd.scheduler.model;
 import java.util.HashMap;
 
 public class Group{
+
+    private final HashMap<Subject, Integer> subjectAmountPerWeek;
+
     private long id;
+
     private String name;
-    private HashMap<Subject,Integer> subjectAmountPerWeek;
+
     public Group(){
         subjectAmountPerWeek = new HashMap<>();
     }
@@ -36,9 +40,7 @@ public class Group{
 
     @Override
     public String toString(){
-        return "Group{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return String.format("Group{id = %d, name= %s}", id, name);
     }
+
 }
