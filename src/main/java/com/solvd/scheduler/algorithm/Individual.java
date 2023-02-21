@@ -65,6 +65,18 @@ public class Individual implements Comparable<Individual> {
         return optionalFitness;
     }
 
+    public void calculateMandatoryFitness() {
+        this.mandatoryFitness = 1 / (double) (this.calculateConflicts() + 1);
+        logger.debug(String.format("[individual %d] calculated mandatory fitness: %f",
+                individualId, this.mandatoryFitness));
+    }
+
+    public void calculateOptionalFitness() {
+        this.optionalFitness = 1 / (double) (this.calculateGapsForGroups() + calculateGapsForTeachers() + 1);
+        logger.debug(String.format("[individual %d] calculated optional fitness: %f",
+                individualId, this.optionalFitness));
+    }
+
     public int calculateGapsForGroups() {
         int gap = 0;
 
@@ -147,134 +159,147 @@ public class Individual implements Comparable<Individual> {
         return gap;
     }
 
-    public void calculateMandatoryFitness() {
-        this.mandatoryFitness = 1 / (double) (this.calculateConflicts() + 1);
-        logger.debug(String.format("[individual %d] calculated mandatory fitness: %f",
-                individualId, this.mandatoryFitness));
-    }
-
-    public void calculateOptionalFitness() {
-        this.optionalFitness = 1 / (double) (this.calculateGapsForGroups() + calculateGapsForTeachers() + 1);
-        logger.debug(String.format("[individual %d] calculated optional fitness: %f",
-                individualId, this.optionalFitness));
-    }
-
     public int calculateConflicts() {
         int conflict = 0;
+        Weekday[] days = Arrays.copyOfRange(Weekday.values(), 0, ChromosomeInput.numSchoolDays);
 
         if (this.chromosome.size() > 1) {
-            for (Lesson l1 : chromosome) {
-                for (Lesson l2 : chromosome) {
-                    if (l1.getSubject().getId() == l2.getSubject().getId()
-                            && l1.getTimeslot().getId() == l2.getTimeslot().getId()
-                            && l1.getLessonId() != l2.getLessonId()) {
-                        conflict++;
-                        logger.trace(String.format("CONFLICT [individual id: %d] time overlap [subjects] between: [%s] and [%s]",
-                                individualId, l1, l2));
-                    }
-                }
+            conflict = calculateTimeslotOverlapConflicts(this.chromosome) +
+                    calculateNumLessonsPerDayConstrainsConflicts(days, this.chromosome) +
+                    calculatedSubjectDistributionConflicts(days, this.chromosome);
+        }
+        logger.debug(String.format("[individual %d] calculated total number of conflicts for groups + teachers: %d",
+                individualId, conflict));
+        return conflict;
+    }
 
-                for (Lesson l2 : chromosome) {
-                    if (l1.getGroup().getId() == l2.getGroup().getId()
-                            && l1.getTimeslot().getId() == l2.getTimeslot().getId()
-                            && l1.getLessonId() != l2.getLessonId()) {
-                        conflict++;
-                        logger.trace(String.format("CONFLICT [individual %d] time overlap [groups] between: [%s] and [%s]",
-                                individualId, l1, l2));
-                    }
+    private int calculateTimeslotOverlapConflicts(List<Lesson> chromosome) {
+        int conflict = 0;
+
+        for (Lesson l1 : chromosome) {
+            for (Lesson l2 : chromosome) {
+                if (l1.getSubject().getId() == l2.getSubject().getId()
+                        && l1.getTimeslot().getId() == l2.getTimeslot().getId()
+                        && l1.getLessonId() != l2.getLessonId()) {
+                    conflict++;
+                    logger.trace(String.format("CONFLICT [individual id: %d] time overlap [subjects] between: [%s] and [%s]",
+                            individualId, l1, l2));
                 }
             }
 
-            Weekday[] days = Arrays.copyOfRange(Weekday.values(), 0, ChromosomeInput.numSchoolDays);
-            List<Long> groupIds = chromosome
+            for (Lesson l2 : chromosome) {
+                if (l1.getGroup().getId() == l2.getGroup().getId()
+                        && l1.getTimeslot().getId() == l2.getTimeslot().getId()
+                        && l1.getLessonId() != l2.getLessonId()) {
+                    conflict++;
+                    logger.trace(String.format("CONFLICT [individual %d] time overlap [groups] between: [%s] and [%s]",
+                            individualId, l1, l2));
+                }
+            }
+        }
+        return conflict;
+    }
+
+    private int calculateNumLessonsPerDayConstrainsConflicts(Weekday[] days, List<Lesson> chromosome) {
+        int conflict = 0;
+
+        List<Long> groupIds = chromosome
+                .stream()
+                .map(p -> p.getGroup().getId())
+                .distinct()
+                .collect(Collectors.toList());
+
+        for (long id : groupIds) {
+            List<Lesson> lessons = chromosome
                     .stream()
-                    .map(p -> p.getGroup().getId())
-                    .distinct()
+                    .filter(p -> p.getGroup().getId() == id)
                     .collect(Collectors.toList());
 
-            for (long id : groupIds) {
-                List<Lesson> lessons = chromosome
+            for (Weekday day : days) {
+                int numLessonsPerDay = (int) lessons
                         .stream()
-                        .filter(p -> p.getGroup().getId() == id)
-                        .collect(Collectors.toList());
+                        .filter(p -> p.getTimeslot().getDay().equals(day))
+                        .count();
 
-                for (Weekday day : days) {
-                    int numLessonsPerDay = (int) lessons
-                            .stream()
-                            .filter(p -> p.getTimeslot().getDay().equals(day))
-                            .count();
+                if (numLessonsPerDay > 0) {
+                    if (numLessonsPerDay < ChromosomeInput.minLessons) {
+                        conflict++;
+                        logger.trace(String.format("CONFLICT [individual %d] Min num of lessons not satisfied for group[%d] " +
+                                "on %s. Calculated num of hours: %d", individualId, id, day, numLessonsPerDay));
+                    }
 
-                    if (numLessonsPerDay > 0) {
-                        if (numLessonsPerDay < ChromosomeInput.minLessons) {
-                            conflict++;
-                            logger.trace(String.format("CONFLICT [individual %d] Min num of lessons not satisfied for group[%d] " +
-                                    "on %s. Calculated num of hours: %d", individualId, id, day, numLessonsPerDay));
-                        }
-
-                        if (numLessonsPerDay > ChromosomeInput.maxLessons) {
-                            conflict++;
-                            logger.trace(String.format("CONFLICT [individual %d] Max num of lessons not satisfied for group[%d] " +
-                                    "on %s. Calculated num of hours: %d", individualId, id, day, numLessonsPerDay));
-                        }
+                    if (numLessonsPerDay > ChromosomeInput.maxLessons) {
+                        conflict++;
+                        logger.trace(String.format("CONFLICT [individual %d] Max num of lessons not satisfied for group[%d] " +
+                                "on %s. Calculated num of hours: %d", individualId, id, day, numLessonsPerDay));
                     }
                 }
             }
+        }
+        return conflict;
+    }
 
-            for (long groupId : groupIds) {
-                Group group = chromosome
-                        .stream()
-                        .filter(p -> p.getGroup().getId() == groupId)
-                        .distinct()
-                        .map(Lesson::getGroup)
-                        .collect(Collectors.toList())
-                        .get(0);
+    private int calculatedSubjectDistributionConflicts(Weekday[] days, List<Lesson> chromosome) {
+        int conflict = 0;
 
-                List<Lesson> lessonsForGivenGroup = chromosome
-                        .stream()
-                        .filter(p -> p.getGroup().getId() == groupId)
-                        .collect(Collectors.toList());
+        List<Long> groupIds = chromosome
+                .stream()
+                .map(p -> p.getGroup().getId())
+                .distinct()
+                .collect(Collectors.toList());
 
-                for (Map.Entry<Subject, Integer> entry : group.getSubjectAmountPerWeek().entrySet()) {
-                    Subject subject = entry.getKey();
-                    int hoursOfSubject = entry.getValue();
+        for (long groupId : groupIds) {
+            Group group = chromosome
+                    .stream()
+                    .filter(p -> p.getGroup().getId() == groupId)
+                    .distinct()
+                    .map(Lesson::getGroup)
+                    .collect(Collectors.toList())
+                    .get(0);
 
-                    if (hoursOfSubject <= ChromosomeInput.numSchoolDays) {
-                        for (Weekday day : days) {
-                            int numHoursOfSubjectOnGivenDay = (int) lessonsForGivenGroup
-                                    .stream()
-                                    .filter(p -> p.getSubject().equals(subject))
-                                    .filter(p -> p.getTimeslot().getDay().equals(day))
-                                    .count();
-                            if (numHoursOfSubjectOnGivenDay > 1) {
-                                conflict++;
-                                logger.trace(String.format("CONFLICT [individual %d] Subject distribution conflict: " +
-                                                "too many lessons of %s for group[%d] on %s. Should be [0 - 1] Calculated num" +
-                                                " of lessons: %d",
-                                        individualId, subject.getName(), groupId, day, numHoursOfSubjectOnGivenDay));
-                            }
+            List<Lesson> lessonsForGivenGroup = chromosome
+                    .stream()
+                    .filter(p -> p.getGroup().getId() == groupId)
+                    .collect(Collectors.toList());
+
+            for (Map.Entry<Subject, Integer> entry : group.getSubjectAmountPerWeek().entrySet()) {
+                Subject subject = entry.getKey();
+                int hoursOfSubject = entry.getValue();
+
+                if (hoursOfSubject <= ChromosomeInput.numSchoolDays) {
+                    for (Weekday day : days) {
+                        int numHoursOfSubjectOnGivenDay = (int) lessonsForGivenGroup
+                                .stream()
+                                .filter(p -> p.getSubject().equals(subject))
+                                .filter(p -> p.getTimeslot().getDay().equals(day))
+                                .count();
+                        if (numHoursOfSubjectOnGivenDay > 1) {
+                            conflict++;
+                            logger.trace(String.format("CONFLICT [individual %d] Subject distribution conflict: " +
+                                            "too many lessons of %s for group[%d] on %s. Should be [0 - 1]. Calculated num" +
+                                            " of lessons: %d",
+                                    individualId, subject.getName(), groupId, day, numHoursOfSubjectOnGivenDay));
                         }
-                    } else {
-                        int minHours = (hoursOfSubject / ChromosomeInput.numSchoolDays);
-                        int maxHours = minHours + 1;
-                        for (Weekday day : days) {
-                            int numHoursOfSubjectOnGivenDay = (int) lessonsForGivenGroup.stream()
-                                    .filter(p -> p.getSubject().equals(subject))
-                                    .filter(p -> p.getTimeslot().getDay().equals(day))
-                                    .count();
-                            if (numHoursOfSubjectOnGivenDay < minHours || numHoursOfSubjectOnGivenDay > maxHours) {
-                                conflict++;
-                                logger.trace(String.format("CONFLICT [individual %d] Subject distribution conflict: " +
-                                                "invalid number of lessons of %s for group[%d] on %s." +
-                                                " Should be [%d - %d]. Calculated num of lessons: %d",
-                                        individualId, subject.getName(), groupId, day, minHours, maxHours, numHoursOfSubjectOnGivenDay));
-                            }
+                    }
+                } else {
+                    int minHours = (hoursOfSubject / ChromosomeInput.numSchoolDays);
+                    int maxHours = minHours + 1;
+                    for (Weekday day : days) {
+                        int numHoursOfSubjectOnGivenDay = (int) lessonsForGivenGroup.stream()
+                                .filter(p -> p.getSubject().equals(subject))
+                                .filter(p -> p.getTimeslot().getDay().equals(day))
+                                .count();
+                        if (numHoursOfSubjectOnGivenDay < minHours || numHoursOfSubjectOnGivenDay > maxHours) {
+                            conflict++;
+                            logger.trace(String.format("CONFLICT [individual %d] Subject distribution conflict: " +
+                                            "invalid number of lessons of %s for group[%d] on %s." +
+                                            " Should be [%d - %d]. Calculated num of lessons: %d",
+                                    individualId, subject.getName(), groupId, day, minHours, maxHours, numHoursOfSubjectOnGivenDay));
                         }
                     }
                 }
             }
         }
-        logger.debug(String.format("[individual %d] calculated total number of conflicts for groups + teachers: %d",
-                individualId, conflict));
         return conflict;
     }
 
