@@ -2,12 +2,12 @@ package com.solvd.scheduler.terminal;
 
 import com.solvd.scheduler.model.Group;
 import com.solvd.scheduler.model.Subject;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class InfoFromDB {
+
     public static void printData(List<Group> groupsAndTheirSubjectWithTimePerWeek) {
         System.out.println("Here you can see information about the number of study hours for each class per week:");
         for (Group g : groupsAndTheirSubjectWithTimePerWeek) {
@@ -18,7 +18,7 @@ public class InfoFromDB {
                 System.out.print(String.format("%s - %s; ", item.getKey().getName(), item.getValue()));
                 count += item.getValue();
             }
-            System.out.println("total: " + count);
+            System.out.println(String.format("total: %s", count));
         }
     }
 }

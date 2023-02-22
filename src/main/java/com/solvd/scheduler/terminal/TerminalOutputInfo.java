@@ -6,7 +6,6 @@ import com.solvd.scheduler.model.Group;
 import com.solvd.scheduler.model.Lesson;
 import com.solvd.scheduler.model.Subject;
 import com.solvd.scheduler.model.Weekday;
-import com.solvd.scheduler.service.implementation.GroupService;
 import io.bretty.console.table.Alignment;
 import io.bretty.console.table.ColumnFormatter;
 import io.bretty.console.table.Table;
@@ -20,6 +19,7 @@ import java.util.stream.Collectors;
 
 public class TerminalOutputInfo {
     private final static Logger logger = LogManager.getLogger(TerminalOutputInfo.class);
+
     public static void presentOutput(Individual individual) {
         if (individual.getMandatoryFitness() == 1) {
             System.out.println("The schedule for all groups was drawn up. " +
@@ -83,7 +83,6 @@ public class TerminalOutputInfo {
                 Arrays.fill(row, "");
             }
             for (int row = 0; row < tableRows; row++) {
-//                groupSchedule[row][0] = Integer.toString(row + 1);
                 groupSchedule[row][0] = (row + ChromosomeInput.SCHOOL_WORKING_HOURS) +
                         ":00-" + (row + ChromosomeInput.SCHOOL_WORKING_HOURS + 1) + ":00";
             }
