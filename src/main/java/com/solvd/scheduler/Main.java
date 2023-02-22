@@ -1,10 +1,13 @@
 package com.solvd.scheduler;
 
 import com.solvd.scheduler.algorithm.IScheduleGenerate;
+import com.solvd.scheduler.algorithm.Individual;
 import com.solvd.scheduler.algorithm.ScheduleGenerator;
 import com.solvd.scheduler.model.Group;
 import com.solvd.scheduler.service.implementation.GroupService;
 import com.solvd.scheduler.service.interfaces.IGroupService;
+import com.solvd.scheduler.terminal.InfoFromDB;
+import com.solvd.scheduler.terminal.TerminalOutputInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,13 +24,13 @@ public class Main {
         logger.info("Check logger");
         IGroupService groupService = new GroupService();
         List<Group> groupsAndTheirSubjectWithTimePerWeek = groupService.groupsAndTheirSubjectWithTimePerWeek();
-        for (Group g : groupsAndTheirSubjectWithTimePerWeek) {
-            System.out.println(g.toString());
-            System.out.println(g.getSubjectAmountPerWeek().keySet().stream().collect(Collectors.toList()));
-        }
+        InfoFromDB.printData(groupsAndTheirSubjectWithTimePerWeek);
+//        for (Group g : groupsAndTheirSubjectWithTimePerWeek) {
+//            System.out.println(g.toString());
+//            System.out.println(g.getSubjectAmountPerWeek().keySet().stream().collect(Collectors.toList()));
+//        }
         System.out.println();
         IScheduleGenerate sg = new ScheduleGenerator(groupsAndTheirSubjectWithTimePerWeek, NUM_DAYS, MIN_LESSONS, MAX_LESSONS);
-        ScheduleGenerator.print(sg.compute());
+        TerminalOutputInfo.presentOutput(new Individual(sg.compute()));
     }
-
 }

@@ -99,13 +99,4 @@ public class ScheduleGenerator implements IScheduleGenerate {
                 population.getIndividual(0).getMandatoryFitness() + " - "
                 + population.getIndividual(0).getOptionalFitness());
     }
-
-    public static void print(List<Lesson> lessons) {
-        if (lessons != null) {
-            Collections.sort(lessons);
-            for (Lesson lesson : lessons) {
-                System.out.println(lesson);
-            }
-        }
-    }
 }
