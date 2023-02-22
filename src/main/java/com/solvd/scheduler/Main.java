@@ -1,6 +1,7 @@
 package com.solvd.scheduler;
 
 import com.solvd.scheduler.algorithm.IScheduleGenerate;
+import com.solvd.scheduler.algorithm.Individual;
 import com.solvd.scheduler.algorithm.ScheduleGenerator;
 import com.solvd.scheduler.model.Group;
 import com.solvd.scheduler.service.implementation.GroupService;
@@ -24,16 +25,12 @@ public class Main {
         IGroupService groupService = new GroupService();
         List<Group> groupsAndTheirSubjectWithTimePerWeek = groupService.groupsAndTheirSubjectWithTimePerWeek();
         InfoFromDB.printData(groupsAndTheirSubjectWithTimePerWeek);
-
 //        for (Group g : groupsAndTheirSubjectWithTimePerWeek) {
 //            System.out.println(g.toString());
 //            System.out.println(g.getSubjectAmountPerWeek().keySet().stream().collect(Collectors.toList()));
 //        }
-
         System.out.println();
         IScheduleGenerate sg = new ScheduleGenerator(groupsAndTheirSubjectWithTimePerWeek, NUM_DAYS, MIN_LESSONS, MAX_LESSONS);
-        //ScheduleGenerator.print(sg.compute());
-        TerminalOutputInfo.presentOutput(ScheduleGenerator.get(sg.compute()));
+        TerminalOutputInfo.presentOutput(new Individual(sg.compute()));
     }
-
 }

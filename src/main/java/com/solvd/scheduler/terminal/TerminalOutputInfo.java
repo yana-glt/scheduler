@@ -11,7 +11,6 @@ import io.bretty.console.table.ColumnFormatter;
 import io.bretty.console.table.Table;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -24,9 +23,9 @@ public class TerminalOutputInfo {
         if (individual.getMandatoryFitness() == 1) {
             System.out.println("The schedule for all groups was drawn up. " +
                     "\nPlease enter :" +
-                    "\n'All groups' if you want to get the schedule for all groups" +
-                    "\n'All teachers' if you want to get the schedule for all teachers" +
-                    "\n'ALL' if you want to get the schedule for all groups and teachers");
+                    "\n1 if you want to get the schedule for all groups" +
+                    "\n2 if you want to get the schedule for all teachers" +
+                    "\n3 if you want to get the schedule for all groups and teachers");
             chooseOption(individual);
         } else {
             System.out.println("The schedule for all groups cannot be drawn up without conflicts. " +
@@ -37,26 +36,26 @@ public class TerminalOutputInfo {
     public static void chooseOption(Individual ind) {
         try (Scanner scanner = new Scanner(System.in)) {
             if (scanner.hasNextLine()) {
-                String inputString = scanner.nextLine();
-                switch (inputString.toUpperCase()) {
-                    case ("ALL GROUPS"):
-                        logger.info("User has selected an option 'ALL GROUPS'");
+                String input = String.valueOf(scanner.nextLine());
+                switch (input) {
+                    case ("1"):
+                        logger.debug("User has selected an option 'ALL GROUPS'");
                         System.out.println("This is the weekly schedule for the groups: ");
                         System.out.println(printScheduleForGroups(ind));
                         break;
-                    case ("ALL TEACHERS"):
-                        logger.info("User has selected an option 'ALL TEACHERS'");
+                    case ("2"):
+                        logger.debug("User has selected an option 'ALL TEACHERS'");
                         System.out.println("This is the weekly schedule for the teachers: ");
                         System.out.println(printScheduleForTeachers(ind));
                         break;
-                    case ("ALL"):
-                        logger.info("User has selected an option 'ALL'");
+                    case ("3"):
+                        logger.debug("User has selected an option 'ALL'");
                         System.out.println("This is the weekly schedule: ");
                         System.out.println(printScheduleForGroups(ind));
                         System.out.println(printScheduleForTeachers(ind));
                         break;
                     default:
-                        logger.info(String.format("Incorrect user input: [%s] does not match the condition", inputString));
+                        logger.debug(String.format("Incorrect user input: [%s] does not match the condition", input));
                         System.out.println("The entered data does not match the condition. Please try again");
                         presentOutput(ind);
                         break;
