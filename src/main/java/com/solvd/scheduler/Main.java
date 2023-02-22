@@ -14,9 +14,11 @@ public class Main{
     public static void main(String[] args){
         IGroupService groupService = new GroupService();
         List<Group> groupsAndTheirSubjectWithTimePerWeek = groupService.groupsAndTheirSubjectWithTimePerWeek();
-        for (Group g : groupsAndTheirSubjectWithTimePerWeek){
-            System.out.println(g.toString());
-            System.out.println(g.getSubjectAmountPerWeek().keySet().stream().collect(Collectors.toList()));
+        if (GroupService.checkData(groupsAndTheirSubjectWithTimePerWeek)) {
+            for (Group g : groupsAndTheirSubjectWithTimePerWeek) {
+                System.out.println(g.toString());
+                System.out.println(g.getSubjectAmountPerWeek().keySet().stream().collect(Collectors.toList()));
+            }
         }
     }
 }

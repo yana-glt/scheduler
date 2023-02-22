@@ -1,6 +1,7 @@
 package com.solvd.scheduler.service.implementation;
 
 import com.solvd.scheduler.dao.interfaces.IGroupDAO;
+import com.solvd.scheduler.exception.EmptyDbException;
 import com.solvd.scheduler.model.Group;
 import com.solvd.scheduler.service.interfaces.IGroupService;
 import com.solvd.scheduler.util.MyBatisDAOFactory;
@@ -31,6 +32,19 @@ public class GroupService implements IGroupService {
             List<Group> groupsAndTheirSubjectWithTimePerWeek = IGroupDAO.getGroupsWithSubjects();
             logger.info("The List<Group> object was retrieved from the database");
             return groupsAndTheirSubjectWithTimePerWeek;
+        }
+    }
+    public static boolean checkData(List<Group> groups) {
+        try {
+            if (!groups.isEmpty()) {
+                return true;
+            } else {
+                throw new EmptyDbException("The database does not contain information about subjects");
+            }
+        }
+        catch(EmptyDbException e){
+            logger.error("The database does not contain information about subjects");
+            return false;
         }
     }
 }
