@@ -6,4 +6,6 @@ import java.util.List;
 public interface IGroupService extends IBaseService <Group> {
 
     List<Group> groupsAndTheirSubjectWithTimePerWeek();
+
+    List<Group> getGroupsWithoutSubjects();
 }

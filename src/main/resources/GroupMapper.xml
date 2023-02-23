@@ -15,20 +15,20 @@
         <result column="name" property="name"/>
     </resultMap>
 
-    <resultMap id="groupResultMap" type="com.solvd.scheduler.model.Group">
+    <resultMap id="groupResultMap" type="com.solvd.scheduler.model.Group" autoMapping="false">
         <id property="id" column="id"/>
         <result property="name" column="name"/>
         <collection property="subjectAmountPerWeek" ofType="com.solvd.scheduler.model.Subject" resultMap="subjectResultMap"/>
     </resultMap>
 
-    <resultMap id="subjectResultMap" type="com.solvd.scheduler.model.Subject">
+    <resultMap id="subjectResultMap" type="com.solvd.scheduler.model.Subject" autoMapping="false">
         <id property="id" column="subject_id"/>
         <result property="name" column="subject_name"/>
         <result property="amountPerWeek" column="subject_amount_per_week"/>
         <association property="teacher" resultMap="teacherResultMap"/>
     </resultMap>
 
-    <resultMap id="teacherResultMap" type="com.solvd.scheduler.model.Teacher">
+    <resultMap id="teacherResultMap" type="com.solvd.scheduler.model.Teacher" autoMapping="false">
         <id property="id" column="teacher_id"/>
         <result property="name" column="teacher_name"/>
     </resultMap>
@@ -38,7 +38,16 @@
         FROM students_group g
         JOIN students_group_has_subject gs ON g.id = gs.students_group_id
         JOIN subject s ON gs.subject_id = s.id
-        JOIN teacher t ON s.teacher_id = t.id;
+        JOIN teacher t ON s.teacher_id = t.id
     </select>
 
+    <resultMap id="groupResultMapWithoutSubjects" type="com.solvd.scheduler.model.Group" autoMapping="false">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <select id="getGroupsWithoutSubjects" resultMap="groupResultMapWithoutSubjects">
+        SELECT g.id, g.name
+        FROM students_group g;
+    </select>
 </mapper>

@@ -17,4 +17,6 @@ public interface IGroupDAO extends IBaseDAO<Group>{
     void deleteRecord(Group entity);
 
     List<Group> getGroupsWithSubjects();
+
+    List<Group> getGroupsWithoutSubjects();
 }
