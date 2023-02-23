@@ -29,26 +29,28 @@ public class GroupService implements IGroupService {
         try (SqlSession sqlSession = SESSION_FACTORY.openSession()) {
             IGroupDAO IGroupDAO = sqlSession.getMapper(IGroupDAO.class);
             List<Group> groupsAndTheirSubjectWithTimePerWeek = IGroupDAO.getGroupsWithSubjects();
-            logger.info("The List<Group> object was retrieved from the database");
+            logger.info("The list of groups (with subjects) was retrieved from the database.");
             return groupsAndTheirSubjectWithTimePerWeek;
         }
     }
+
     @Override
     public List<Group> getGroupsWithoutSubjects() {
         try (SqlSession sqlSession = SESSION_FACTORY.openSession()) {
             IGroupDAO IGroupDAO = sqlSession.getMapper(IGroupDAO.class);
-            List<Group> groups = IGroupDAO.getGroupsWithoutSubjects();
-            logger.info("The List<Group> object was retrieved from the database");
-            return groups;
+            List<Group> groupsWithoutSubjects = IGroupDAO.getGroupsWithoutSubjects();
+            logger.info("The list of groups (without subjects) was retrieved from the database.");
+            return groupsWithoutSubjects;
         }
     }
 
     public static boolean checkData(List<Group> groups) {
         if (!groups.isEmpty()) {
+            logger.info("Database contains groups.");
             return true;
         } else {
+            logger.error("The resulting list of groups is empty.");
             return false;
         }
     }
 }
-

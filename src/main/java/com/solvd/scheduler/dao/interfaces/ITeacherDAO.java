@@ -3,6 +3,7 @@ package com.solvd.scheduler.dao.interfaces;
 import com.solvd.scheduler.model.Teacher;
 
 public interface ITeacherDAO extends IBaseDAO<Teacher>{
+
     @Override
     Teacher getRecordById(long id);
 
@@ -14,4 +15,5 @@ public interface ITeacherDAO extends IBaseDAO<Teacher>{
 
     @Override
     void deleteRecord(Teacher entity);
+
 }

@@ -4,6 +4,7 @@ import com.solvd.scheduler.model.Group;
 import java.util.List;
 
 public interface IGroupDAO extends IBaseDAO<Group>{
+
     @Override
     Group getRecordById(long id);
 

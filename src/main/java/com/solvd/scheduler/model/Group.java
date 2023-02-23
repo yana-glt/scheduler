@@ -1,11 +1,18 @@
 package com.solvd.scheduler.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Group{
+
+    private final HashMap<Subject, Integer> subjectAmountPerWeek;
+
     private long id;
+
     private String name;
-    private HashMap<Subject,Integer> subjectAmountPerWeek;
+
     public Group(){
         subjectAmountPerWeek = new HashMap<>();
     }
@@ -34,11 +41,19 @@ public class Group{
         subjectAmountPerWeek.put(subject, subject.getAmountPerWeek());
     }
 
+    public List<Subject> getSubjectsAsList() {
+        ArrayList<Subject> subjectsTemp = new ArrayList<>();
+        for (Map.Entry<Subject, Integer> subjectEntry : subjectAmountPerWeek.entrySet()) {
+            for (int i = 0; i < subjectEntry.getValue(); i++) {
+                subjectsTemp.add(subjectEntry.getKey());
+            }
+        }
+        return subjectsTemp;
+    }
+
     @Override
     public String toString(){
-        return "Group{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return String.format("Group{id = %d, name= %s}", id, name);
     }
+
 }

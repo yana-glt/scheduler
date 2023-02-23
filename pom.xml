@@ -15,11 +15,6 @@
             <version>8.0.30</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-dbcp2</artifactId>
-            <version>2.9.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>2.19.0</version>
@@ -34,24 +29,15 @@
             <artifactId>mybatis</artifactId>
             <version>3.5.11</version>
         </dependency>
+        <dependency>
+            <groupId>io.bretty</groupId>
+            <artifactId>console-table-builder</artifactId>
+            <version>1.2</version>
+        </dependency>
     </dependencies>
 
     <properties>
         <maven.compiler.source>18</maven.compiler.source>
         <maven.compiler.target>18</maven.compiler.target>
     </properties>
-    <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>mybatis-config.xml</include>
-                    <include>db.properties</include>
-                    <include>GroupMapper.xml</include>
-                    <include>SubjectMapper.xml</include>
-                    <include>TeacherMapper.xml</include>
-                </includes>
-            </resource>
-        </resources>
-    </build>
 </project>
