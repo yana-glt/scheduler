@@ -77,7 +77,7 @@ public class GroupService implements IGroupService {
                 System.out.println("There is not enough data in the database for scheduling. Subjects for groups are not specified." +
                         "\nPlease add subjects for the groups below and try again.");
                 InfoFromDB.printDataAboutGroupsWithoutSubjects(groupsWithoutSubjects);
-                return groupsWithoutSubjects;
+                System.exit(-1);
             }else{
                 logger.error("There is no data in the database for scheduling.");
                 System.out.println("There is no data in the database for scheduling. " +
