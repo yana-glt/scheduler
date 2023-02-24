@@ -9,6 +9,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GroupService implements IGroupService {
     private final static Logger logger = LogManager.getLogger(GroupService.class);
@@ -53,4 +54,24 @@ public class GroupService implements IGroupService {
             return false;
         }
     }
+
+    public static List<Group> gettingGroupWithSubjectImplementation(){
+        IGroupService groupService = new GroupService();
+        List<Group> groupsAndTheirSubjectWithTimePerWeek = groupService.groupsAndTheirSubjectWithTimePerWeek();
+        if(GroupService.checkData(groupsAndTheirSubjectWithTimePerWeek)){
+            return groupsAndTheirSubjectWithTimePerWeek;
+        }else{
+            List<Group> groupsWithoutSubjects = groupService.getGroupsWithoutSubjects();
+            if(GroupService.checkData(groupsWithoutSubjects)){
+                logger.error("There is not enough data in the database for scheduling." +
+                        "\nSubjects for groups are not specified.");
+                return groupsWithoutSubjects;
+            }else{
+                logger.error("There is no data in the database for scheduling.");
+                System.exit(-1);
+            }
+        }
+        return null;
+    }
+
 }
