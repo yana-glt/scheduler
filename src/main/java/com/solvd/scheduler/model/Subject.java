@@ -3,13 +3,9 @@ package com.solvd.scheduler.model;
 import java.util.Objects;
 
 public class Subject{
-
     private long id;
-
     private String name;
-
     private Teacher teacher;
-
     private int amountPerWeek;
 
     public long getId(){
@@ -62,5 +58,4 @@ public class Subject{
         return String.format("Subject{id= %d, name = %s,teacher= %s, amountPerWeek= %d}", id,
                 name, teacher, amountPerWeek);
     }
-
 }

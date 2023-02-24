@@ -1,11 +1,9 @@
 package com.solvd.scheduler;
 
 import com.solvd.scheduler.model.Group;
-import com.solvd.scheduler.model.Subject;
 import com.solvd.scheduler.service.implementation.GroupService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -16,10 +14,5 @@ public class Main {
 
     public static void main(String[] args) {
         List<Group> groups=  GroupService.gettingGroupWithSubjectImplementation();
-        for (Group g : groups) {
-            System.out.println(g.toString());
-            ArrayList<Subject> subjects=new ArrayList<>(g.getSubjectAmountPerWeek().keySet());
-            System.out.println(subjects);
-        }
     }
 }

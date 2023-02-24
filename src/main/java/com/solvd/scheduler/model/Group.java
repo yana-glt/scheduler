@@ -6,11 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 public class Group{
-
     private final HashMap<Subject, Integer> subjectAmountPerWeek;
-
     private long id;
-
     private String name;
 
     public Group(){
@@ -55,5 +52,4 @@ public class Group{
     public String toString(){
         return String.format("Group{id = %d, name= %s}", id, name);
     }
-
 }

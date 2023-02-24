@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class InfoFromDB {
 
-    public static void printData(List<Group> groupsAndTheirSubjectWithTimePerWeek) {
+    public static void printDataAboutGroupsWithSubjects(List<Group> groupsAndTheirSubjectWithTimePerWeek) {
         System.out.println("Here you can see information about the number of study hours for each class per week:");
         for (Group g : groupsAndTheirSubjectWithTimePerWeek) {
             System.out.print(g.getName() + ": ");
@@ -19,6 +19,12 @@ public class InfoFromDB {
                 count += item.getValue();
             }
             System.out.println(String.format("total: %s", count));
+        }
+    }
+
+    public static void printDataAboutGroupsWithoutSubjects(List<Group> groups) {
+        for (Group g : groups) {
+            System.out.println(g.getName());
         }
     }
 }

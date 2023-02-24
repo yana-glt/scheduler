@@ -3,6 +3,7 @@ package com.solvd.scheduler.service.implementation;
 import com.solvd.scheduler.dao.interfaces.IGroupDAO;
 import com.solvd.scheduler.model.Group;
 import com.solvd.scheduler.service.interfaces.IGroupService;
+import com.solvd.scheduler.terminal.InfoFromDB;
 import com.solvd.scheduler.util.MyBatisDAOFactory;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -58,7 +59,7 @@ public class GroupService implements IGroupService {
         IGroupService groupService = new GroupService();
         List<Group> groupsAndTheirSubjectWithTimePerWeek = groupService.groupsAndTheirSubjectWithTimePerWeek();
         if(!GroupService.isListOfGroupsEmpty(groupsAndTheirSubjectWithTimePerWeek)){
-            //InfoFromDB.printDataAboutGroupsWithSubjects(groupsAndTheirSubjectWithTimePerWeek);
+            InfoFromDB.printDataAboutGroupsWithSubjects(groupsAndTheirSubjectWithTimePerWeek);
             int maxAmountOfHoursInDB= groupsAndTheirSubjectWithTimePerWeek.stream().map(p -> p.getSubjectsAsList().size()).max(Integer::compareTo).orElse(0);
             if(maxAmountOfHoursInDB <= 40){
                 return groupsAndTheirSubjectWithTimePerWeek;
@@ -74,11 +75,8 @@ public class GroupService implements IGroupService {
             if(!GroupService.isListOfGroupsEmpty(groupsWithoutSubjects)){
                 logger.error("There is not enough data in the database for scheduling. Subjects for groups are not specified.");
                 System.out.println("There is not enough data in the database for scheduling. Subjects for groups are not specified." +
-                        "\nPlease change the data in the database for the groups below and try again.");
-                //InfoFromDB.printDataAboutGroupsWithoutSubjects(groupsWithoutSubjects);
-                for (Group g : groupsWithoutSubjects) {
-                    System.out.println(g.getName());
-                }
+                        "\nPlease add subjects for the groups below and try again.");
+                InfoFromDB.printDataAboutGroupsWithoutSubjects(groupsWithoutSubjects);
                 return groupsWithoutSubjects;
             }else{
                 logger.error("There is no data in the database for scheduling.");

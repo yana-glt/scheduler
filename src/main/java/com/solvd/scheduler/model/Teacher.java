@@ -1,9 +1,7 @@
 package com.solvd.scheduler.model;
 
 public class Teacher{
-
     private long id;
-
     private String name;
 
     public long getId(){
@@ -26,5 +24,4 @@ public class Teacher{
     public String toString(){
         return String.format("Teacher{id= %d, name= %s}", id, name);
     }
-
 }
