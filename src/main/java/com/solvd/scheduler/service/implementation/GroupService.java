@@ -9,7 +9,6 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class GroupService implements IGroupService {
     private final static Logger logger = LogManager.getLogger(GroupService.class);
@@ -45,12 +44,12 @@ public class GroupService implements IGroupService {
         }
     }
 
-    public static boolean checkData(List<Group> groups) {
-        if (!groups.isEmpty()) {
-            logger.info("Database contains groups.");
+    public static boolean isListOfGroupsEmpty(List<Group> groups) {
+        if (groups.isEmpty()) {
+            logger.error("The resulting list of groups is empty.");
             return true;
         } else {
-            logger.error("The resulting list of groups is empty.");
+            logger.info("Database contains groups.");
             return false;
         }
     }
@@ -58,20 +57,36 @@ public class GroupService implements IGroupService {
     public static List<Group> gettingGroupWithSubjectImplementation(){
         IGroupService groupService = new GroupService();
         List<Group> groupsAndTheirSubjectWithTimePerWeek = groupService.groupsAndTheirSubjectWithTimePerWeek();
-        if(GroupService.checkData(groupsAndTheirSubjectWithTimePerWeek)){
-            return groupsAndTheirSubjectWithTimePerWeek;
+        if(!GroupService.isListOfGroupsEmpty(groupsAndTheirSubjectWithTimePerWeek)){
+            //InfoFromDB.printDataAboutGroupsWithSubjects(groupsAndTheirSubjectWithTimePerWeek);
+            int maxAmountOfHoursInDB= groupsAndTheirSubjectWithTimePerWeek.stream().map(p -> p.getSubjectsAsList().size()).max(Integer::compareTo).orElse(0);
+            if(maxAmountOfHoursInDB <= 40){
+                return groupsAndTheirSubjectWithTimePerWeek;
+            }else{
+                logger.error(String.format("At least one group in the database has %d lessons, which is more than the maximum possible 40 hours.", maxAmountOfHoursInDB));
+                System.out.println("Calculated minimal amount of days required to allocate all lessons for some groups exceeds " +
+                        "max number of working days in the week [5 days].\nFor this reason schedule can't be generated. " +
+                        "Please go to DB and check if each group has less or equal to 40 hours per week");
+                System.exit(-1);
+            }
         }else{
             List<Group> groupsWithoutSubjects = groupService.getGroupsWithoutSubjects();
-            if(GroupService.checkData(groupsWithoutSubjects)){
-                logger.error("There is not enough data in the database for scheduling." +
-                        "\nSubjects for groups are not specified.");
+            if(!GroupService.isListOfGroupsEmpty(groupsWithoutSubjects)){
+                logger.error("There is not enough data in the database for scheduling. Subjects for groups are not specified.");
+                System.out.println("There is not enough data in the database for scheduling. Subjects for groups are not specified." +
+                        "\nPlease change the data in the database for the groups below and try again.");
+                //InfoFromDB.printDataAboutGroupsWithoutSubjects(groupsWithoutSubjects);
+                for (Group g : groupsWithoutSubjects) {
+                    System.out.println(g.getName());
+                }
                 return groupsWithoutSubjects;
             }else{
                 logger.error("There is no data in the database for scheduling.");
+                System.out.println("There is no data in the database for scheduling. " +
+                        "\nPlease add data and try again.");
                 System.exit(-1);
             }
         }
         return null;
     }
-
 }
