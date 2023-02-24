@@ -17,6 +17,7 @@ public class Main {
     private static final int MIN_LESSONS = 2;
     private static final int MAX_LESSONS = 8;
 
+
     public static void main(String[] args) {
         List<Group> groups=  GroupService.gettingGroupWithSubjectImplementation();
         for (Group g : groups) {
