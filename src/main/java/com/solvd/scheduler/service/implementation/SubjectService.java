@@ -10,9 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class SubjectService implements ISubjectService{
-
     private final static Logger logger = LogManager.getLogger(SubjectService.class);
-
     private static final SqlSessionFactory SESSION_FACTORY = MyBatisDAOFactory.getSqlSessionFactory();
 
     @Override
@@ -20,23 +18,8 @@ public class SubjectService implements ISubjectService{
         try (SqlSession sqlSession = SESSION_FACTORY.openSession()){
             ISubjectDAO subjectDAO = sqlSession.getMapper(ISubjectDAO.class);
             Subject subject = subjectDAO.getRecordById(1);
+            logger.info("The Subject class object with id " + id + "was retrieved from the database");
             return subject;
         }
     }
-
-    @Override
-    public void insertRecord(Subject entity){
-
-    }
-
-    @Override
-    public void updateRecord(Subject entity){
-
-    }
-
-    @Override
-    public void deleteRecord(Subject entity){
-
-    }
-
 }

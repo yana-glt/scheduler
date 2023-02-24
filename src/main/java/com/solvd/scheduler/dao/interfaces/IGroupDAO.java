@@ -1,7 +1,6 @@
 package com.solvd.scheduler.dao.interfaces;
 
 import com.solvd.scheduler.model.Group;
-
 import java.util.List;
 
 public interface IGroupDAO extends IBaseDAO<Group>{
@@ -20,4 +19,5 @@ public interface IGroupDAO extends IBaseDAO<Group>{
 
     List<Group> getGroupsWithSubjects();
 
+    List<Group> getGroupsWithoutSubjects();
 }
