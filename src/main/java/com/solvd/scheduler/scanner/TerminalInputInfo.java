@@ -14,7 +14,7 @@ import static com.solvd.scheduler.scanner.MinMaxPossibleNums.*;
 public class TerminalInputInfo {
     public static final int MAX_NUM_OF_SLOTS_PER_DAY = 8;
     public static final int MAX_AMOUNT_OF_WORKING_DAYS_PER_WEEK = 5;
-    public static final int DAY_MAY_CONTAIN_A_MIN_OF_LESSONS = 2;
+    public static final int DAY_MAY_CONTAIN_A_MIN_OF_LESSONS = 1;
     public static int daysPerWeek;
     public static int maxLessonsPerDay;
     public static int minLessonsPerDay;
@@ -28,8 +28,9 @@ public class TerminalInputInfo {
         hoursPerWeekByMax = getHoursInGroupWithMaxHoursPerWeek(groups);
         hoursPerWeekByMin = getHoursInGroupWithMinHoursPerWeek(groups);
         daysPerWeek = getAmountOfWorkingDaysPerAWeek();
-        maxLessonsPerDay = getMaxNumberOfLessonsPerDay();
         minLessonsPerDay = getMinNumberOfLessonsPerDay();
+        maxLessonsPerDay = getMaxNumberOfLessonsPerDay();
+
     }
 
     public static int getAmountOfWorkingDaysPerAWeek() throws InputException {
