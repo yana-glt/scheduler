@@ -55,30 +55,36 @@ public class GroupService implements IGroupService {
         }
     }
 
-    public static List<Group> gettingGroupWithSubjectImplementation(){
+    public static List<Group> gettingGroupWithSubjectImplementation() {
         IGroupService groupService = new GroupService();
         List<Group> groupsAndTheirSubjectWithTimePerWeek = groupService.groupsAndTheirSubjectWithTimePerWeek();
-        if(!GroupService.isListOfGroupsEmpty(groupsAndTheirSubjectWithTimePerWeek)){
-            InfoFromDB.printDataAboutGroupsWithSubjects(groupsAndTheirSubjectWithTimePerWeek);
-            int maxAmountOfHoursInDB= groupsAndTheirSubjectWithTimePerWeek.stream().map(p -> p.getSubjectsAsList().size()).max(Integer::compareTo).orElse(0);
-            if(maxAmountOfHoursInDB <= 40){
+        if (!GroupService.isListOfGroupsEmpty(groupsAndTheirSubjectWithTimePerWeek)) {
+            int maxAmountOfHoursInDB = groupsAndTheirSubjectWithTimePerWeek.stream().map(p -> p.getSubjectsAsList().size()).max(Integer::compareTo).orElse(0);
+            if (maxAmountOfHoursInDB == 0) {
+                logger.error("There are no subjects in the database in any of the groups " +
+                        "in which at least one subject had a number of hours greater than or equal to 1");
+                System.out.println("There are no subjects in the database in any of the groups " +
+                        "in which at least one subject had a number of hours greater than or equal to 1");
+                System.exit(-1);
+            } else if (maxAmountOfHoursInDB <= 40) {
+                InfoFromDB.printDataAboutGroupsWithSubjects(groupsAndTheirSubjectWithTimePerWeek);
                 return groupsAndTheirSubjectWithTimePerWeek;
-            }else{
+            } else {
                 logger.error(String.format("At least one group in the database has %d lessons, which is more than the maximum possible 40 hours.", maxAmountOfHoursInDB));
                 System.out.println("Calculated minimal amount of days required to allocate all lessons for some groups exceeds " +
                         "max number of working days in the week [5 days].\nFor this reason schedule can't be generated. " +
                         "Please go to DB and check if each group has less or equal to 40 hours per week");
                 System.exit(-1);
             }
-        }else{
+        } else {
             List<Group> groupsWithoutSubjects = groupService.getGroupsWithoutSubjects();
-            if(!GroupService.isListOfGroupsEmpty(groupsWithoutSubjects)){
+            if (!GroupService.isListOfGroupsEmpty(groupsWithoutSubjects)) {
                 logger.error("There is not enough data in the database for scheduling. Subjects for groups are not specified.");
                 System.out.println("There is not enough data in the database for scheduling. Subjects for groups are not specified." +
                         "\nPlease add subjects for the groups below and try again.");
                 InfoFromDB.printDataAboutGroupsWithoutSubjects(groupsWithoutSubjects);
                 System.exit(-1);
-            }else{
+            } else {
                 logger.error("There is no data in the database for scheduling.");
                 System.out.println("There is no data in the database for scheduling. " +
                         "\nPlease add data and try again.");
