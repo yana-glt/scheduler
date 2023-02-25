@@ -22,7 +22,7 @@ public class Main {
     public final static Logger logger = LogManager.getLogger(Main.class);
 
     public static void main(String[] args) throws InputException {
-        logger.info("Check logger");
+        logger.debug("Check logger");
         IGroupService groupService = new GroupService();
         List<Group> groupsAndTheirSubjectWithTimePerWeek = groupService.groupsAndTheirSubjectWithTimePerWeek();
         InfoFromDB.printData(groupsAndTheirSubjectWithTimePerWeek);
