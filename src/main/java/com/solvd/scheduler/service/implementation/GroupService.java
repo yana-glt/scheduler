@@ -73,7 +73,7 @@ public class GroupService implements IGroupService {
                 logger.error(String.format("At least one group in the database has %d lessons, which is more than the maximum possible 40 hours.", maxAmountOfHoursInDB));
                 System.out.println("Calculated minimal amount of days required to allocate all lessons for some groups exceeds " +
                         "max number of working days in the week [5 days].\nFor this reason schedule can't be generated. " +
-                        "Please go to DB and check if each group has less or equal to 40 hours per week");
+                        "Please go to DB and check if each group has less or equal to 40 hours of lessons per week");
                 System.exit(-1);
             }
         } else {
