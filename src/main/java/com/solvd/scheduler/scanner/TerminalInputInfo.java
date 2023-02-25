@@ -49,15 +49,17 @@ public class TerminalInputInfo {
                 System.out.println("Exception: You entered invalid values. Try again!");
                 getAmountOfWorkingDaysPerAWeek();
             } else {
-                int answer = scanner.nextInt();
-                try {
-                    ScannerUtils.checkCorrectValue(answer, getMinAmountOfWorkingDaysPerWeek(), getMaxAmountOfWorkingDaysPerWeek());
-                    amountOfWorkingDaysPerAWeek = answer;
-                    logger.info("Accepted number of working days is " + amountOfWorkingDaysPerAWeek);
-                } catch (InputException e) {
-                    System.out.println("Problem occurred: Invalid characters were entered in the field");
-                    getAmountOfWorkingDaysPerAWeek();
-                }
+                do {
+                    int answer = scanner.nextInt();
+                    try {
+                        ScannerUtils.checkCorrectValue(answer, getMinAmountOfWorkingDaysPerWeek(), getMaxAmountOfWorkingDaysPerWeek());
+                        amountOfWorkingDaysPerAWeek = answer;
+                        logger.info("Accepted number of working days is " + amountOfWorkingDaysPerAWeek);
+                    } catch (InputException e) {
+                        System.out.println("Problem occurred: Invalid characters were entered in the field");
+                        getAmountOfWorkingDaysPerAWeek();
+                    }
+                } while (amountOfWorkingDaysPerAWeek == 0);
             }
         }
         return amountOfWorkingDaysPerAWeek;
@@ -81,21 +83,23 @@ public class TerminalInputInfo {
                     System.out.println("Exception: You entered invalid values. Try again!");
                     getMinNumberOfLessonsPerDay();
                 } else {
-                    int answer = scan.nextInt();
-                    try {
-                        ScannerUtils.checkCorrectValue(answer, getMinPossibleLessonsPerDayForMinValue(), getMaxPossibleLessonsPerDayForMinValue());
-                        minNumberOfLessonsPerDay = answer;
-                        logger.info("Accepted number of minimum lessons is " + minNumberOfLessonsPerDay);
-                    } catch (InputException e) {
-                        System.out.println("Problem occurred: Invalid characters were entered in the field.");
-                        getMinNumberOfLessonsPerDay();
+                    do {
+                        int answer = scan.nextInt();
+                        try {
+                            ScannerUtils.checkCorrectValue(answer, getMinPossibleLessonsPerDayForMinValue(), getMaxPossibleLessonsPerDayForMinValue());
+                            minNumberOfLessonsPerDay = answer;
+                            logger.info("Accepted number of minimum lessons is " + minNumberOfLessonsPerDay);
+                        } catch (InputException e) {
+                            System.out.println("Problem occurred: Invalid characters were entered in the field.");
+                            getMinNumberOfLessonsPerDay();
+                        }
                     }
+                    while (minNumberOfLessonsPerDay == 0);
                 }
             }
         }
         return minNumberOfLessonsPerDay;
     }
-
 
     public static int getMaxNumberOfLessonsPerDay() {
         logger.info("The number of MAXIMUM lessons per day is requested");
@@ -104,23 +108,26 @@ public class TerminalInputInfo {
                     " of lessons is set to %d by default\n", getMaxPossibleLessonsPerDayForMaxValue(), getMaxPossibleLessonsPerDayForMaxValue());
             minNumberOfLessonsPerDay = getMaxPossibleLessonsPerDayForMaxValue();
         } else {
-            System.out.printf("\nSelect MAXIMUM number of lessons per day (%d-%d)\n", getMinPossibleLessonsPerDayForMaxValue(), getMaxPossibleLessonsPerDayForMaxValue());
-            Scanner sc = new Scanner(System.in);
-            if (!(sc.hasNextInt())) {
-                logger.error(String.format("Exception: The entered data \"%s\" does not match the condition\"", sc.next()));
-                System.out.println("Exception: You entered invalid values. Try again!");
-                getMaxNumberOfLessonsPerDay();
-            } else {
-                int answer = Integer.parseInt(sc.next());
-                try {
-                    ScannerUtils.checkCorrectValue(answer, getMinPossibleLessonsPerDayForMaxValue(), getMaxPossibleLessonsPerDayForMaxValue());
-                    maxNumberOfLessonsPerDay = answer;
-                    logger.info("Accepted number of maximum lessons is " + maxNumberOfLessonsPerDay);
-                } catch (InputException e) {
-                    System.out.println("Problem occurred: Invalid characters were entered in the field.");
+            do {
+                System.out.printf("\nSelect MAXIMUM number of lessons per day (%d-%d)\n", getMinPossibleLessonsPerDayForMaxValue(), getMaxPossibleLessonsPerDayForMaxValue());
+                Scanner sc = new Scanner(System.in);
+                if (!(sc.hasNextInt())) {
+                    logger.error(String.format("Exception: The entered data \"%s\" does not match the condition\"", sc.next()));
+                    System.out.println("Exception: You entered invalid values. Try again!");
                     getMaxNumberOfLessonsPerDay();
+                } else {
+                    int answer = Integer.parseInt(sc.next());
+                    try {
+                        ScannerUtils.checkCorrectValue(answer, getMinPossibleLessonsPerDayForMaxValue(), getMaxPossibleLessonsPerDayForMaxValue());
+                        maxNumberOfLessonsPerDay = answer;
+                        logger.info("Accepted number of maximum lessons is " + maxNumberOfLessonsPerDay);
+                    } catch (InputException e) {
+                        System.out.println("Problem occurred: Invalid characters were entered in the field.");
+                        getMaxNumberOfLessonsPerDay();
+                    }
                 }
             }
+            while (maxNumberOfLessonsPerDay == 0);
         }
         return maxNumberOfLessonsPerDay;
     }
