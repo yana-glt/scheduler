@@ -16,18 +16,29 @@ MySQL Workbench
 ## Quick Start:
 - [ ] Clone this repository.
 - [ ] Open package with project in your IDE
-- [ ] Import scheduler_create_script.sql file in your database (here you can see the eer.diagram)
-- [ ] Populate the tables of this database with your data or use this data as an example.
-- [ ] Set your database credendtials in db.properties file
+- [ ] Import [scheduler_create_script.sql](https://github.com/yana-glt/scheduler/blob/prerelease/src/main/resources/db/scheduler_create_script.sql) file in your database (here you can see the [eer.diagram](https://github.com/yana-glt/scheduler/blob/prerelease/src/main/resources/db/scheduler_eer_diagram.png))
+- [ ] Populate the tables of this database with your data or use [insert_queries_example.sql](https://github.com/yana-glt/scheduler/blob/prerelease/src/main/resources/db/insert_queries_example.sql) as an example.
+- [ ] Set your database credendtials in [db.properties file](https://github.com/yana-glt/scheduler/blob/prerelease/src/main/resources/db.properties)
 - [ ] Run application
 
-The algorithm works based on the initial set limits of a maximum of 5 working days and a maximum of 8 lessons per day.
+## Application process
+The algorithm works based on the initial set limits of a maximum of `5 working days` and a maximum of `8 lessons per day`.
 
-After launching the application a scanner opens and requests, checks and accepts from the user the parameters for which it is necessary to create a schedule.
-That information is about the desired number of days, the maximum and minimum lessons per day
-(within the limits indicated above and based on the number of lessons presented in the database). -> (Sample input)
+After launching, the Application asks you, validates and accepts the parameters for which it is necessary to create a schedule: <br>
+what `number of working days` per week should be taken into account, the `maximum lessons per day` and `minimum lessons per day` taking into account the limits indicated above, as well as based on the number of lessons presented in the database.
+
+<img src="https://github.com/yana-glt/scheduler/blob/prerelease/src/main/resources/forReadme/scanner_input.jpg" width="350">
 
 If the Application managed to generate a schedule, taking into account the entered parameters,
-the user is given the opportunity to choose the type of information displayed in the terminal (ask about output example)
-Depending on this choice, user can get the few options for displaying information on the screen: timetable for classes, timetable for teachers, or timetable for both categories. (1 option)
-If, based on the specified conditions, the application failed to create a schedule, the user will receive a corresponding message (message) 
+you will get the opportunity to choose the type of information displayed in the terminal:
+
+<img src="https://github.com/yana-glt/scheduler/blob/prerelease/src/main/resources/forReadme/ask_about_output.jpg" width="500">
+
+Depending on this choice, you can get the few options for displaying information on the screen: 
+`timetable for classes`, `timetable for teachers`, or `timetable for both categories`:
+
+<img src="https://github.com/yana-glt/scheduler/blob/prerelease/src/main/resources/forReadme/sample_output.PNG" width="700">
+
+If, based on the specified conditions, the Application failed to create a schedule, you will receive a corresponding message:
+
+<img src="https://github.com/yana-glt/scheduler/blob/prerelease/src/main/resources/forReadme/message.PNG" width="500">
