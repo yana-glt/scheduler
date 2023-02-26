@@ -1,10 +1,10 @@
 # The Scheduler
 
 The Scheduler is a school timetable generator.<br>  
-It creates schedule for both classes and teachers, making the most convenient arrangement of subjects in the educational grid for both categories.
+It creates schedule for both classes and teachers, making the most convenient arrangement of subjects in the educational grid.
 
 The implementation of the genetic algorithm allows you:
-- To create a schedule without coincidences, both for teachers and for groups of students
+- To create a schedule without overlaps
 - Prevent or at least minimize the number of gaps in the schedule
 - Distribute the load evenly over the days of the week
 
