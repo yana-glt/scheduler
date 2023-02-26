@@ -1,4 +1,4 @@
-package com.solvd.scheduler.scanner;
+package com.solvd.scheduler.terminal.scanner;
 
 import java.util.List;
 import java.util.Scanner;
@@ -7,9 +7,9 @@ import com.solvd.scheduler.exception.InputException;
 import com.solvd.scheduler.model.Group;
 
 import static com.solvd.scheduler.Main.logger;
-import static com.solvd.scheduler.scanner.DbInfo.getHoursInGroupWithMaxHoursPerWeek;
-import static com.solvd.scheduler.scanner.DbInfo.getHoursInGroupWithMinHoursPerWeek;
-import static com.solvd.scheduler.scanner.MinMaxPossibleNums.*;
+import static com.solvd.scheduler.terminal.scanner.MinMaxPossibleNums.*;
+import static com.solvd.scheduler.terminal.InfoFromDB.getHoursInGroupWithMaxHoursPerWeek;
+import static com.solvd.scheduler.terminal.InfoFromDB.getHoursInGroupWithMinHoursPerWeek;
 import static java.lang.System.in;
 
 public class TerminalInputInfo {

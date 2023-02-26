@@ -1,4 +1,4 @@
-package com.solvd.scheduler.scanner;
+package com.solvd.scheduler.terminal.scanner;
 
 import com.solvd.scheduler.exception.InputException;
 
