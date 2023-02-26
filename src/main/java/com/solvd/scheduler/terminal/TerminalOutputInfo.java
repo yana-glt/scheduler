@@ -11,13 +11,14 @@ import io.bretty.console.table.ColumnFormatter;
 import io.bretty.console.table.Table;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class TerminalOutputInfo {
-    private final static Logger logger = LogManager.getLogger(TerminalOutputInfo.class);
+    private final static Logger LOGGER = LogManager.getLogger(TerminalOutputInfo.class);
 
     public static void presentOutput(List<Lesson> lessons) {
         if (lessons != null && lessons.size() > 0) {
@@ -42,23 +43,23 @@ public class TerminalOutputInfo {
                 String input = String.valueOf(scanner.nextLine());
                 switch (input) {
                     case ("1"):
-                        logger.debug("User has selected an option 'ALL GROUPS'");
+                        LOGGER.debug("User has selected an option 'ALL GROUPS'");
                         System.out.println("This is the weekly schedule for the groups: ");
                         System.out.println(printScheduleForGroups(ind));
                         break;
                     case ("2"):
-                        logger.debug("User has selected an option 'ALL TEACHERS'");
+                        LOGGER.debug("User has selected an option 'ALL TEACHERS'");
                         System.out.println("This is the weekly schedule for the teachers: ");
                         System.out.println(printScheduleForTeachers(ind));
                         break;
                     case ("3"):
-                        logger.debug("User has selected an option 'ALL'");
+                        LOGGER.debug("User has selected an option 'ALL'");
                         System.out.println("This is the weekly schedule: ");
                         System.out.println(printScheduleForGroups(ind));
                         System.out.println(printScheduleForTeachers(ind));
                         break;
                     default:
-                        logger.debug(String.format("Incorrect user input: [%s] does not match the condition", input));
+                        LOGGER.debug(String.format("Incorrect user input: [%s] does not match the condition", input));
                         System.out.println("The entered data does not match the condition. Please try again");
                         presentOutput(ind.getChromosome());
                         break;

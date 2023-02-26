@@ -5,36 +5,36 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Group{
+public class Group {
     private final HashMap<Subject, Integer> subjectAmountPerWeek;
     private long id;
     private String name;
 
-    public Group(){
+    public Group() {
         subjectAmountPerWeek = new HashMap<>();
     }
 
-    public long getId(){
+    public long getId() {
         return id;
     }
 
-    public void setId(long id){
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
 
-    public HashMap<Subject, Integer> getSubjectAmountPerWeek(){
+    public HashMap<Subject, Integer> getSubjectAmountPerWeek() {
         return subjectAmountPerWeek;
     }
 
-    public void setSubjectAmountPerWeek(Subject subject){
+    public void setSubjectAmountPerWeek(Subject subject) {
         subjectAmountPerWeek.put(subject, subject.getAmountPerWeek());
     }
 
@@ -49,7 +49,7 @@ public class Group{
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return String.format("Group{id = %d, name= %s}", id, name);
     }
 }

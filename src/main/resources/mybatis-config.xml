@@ -19,7 +19,5 @@
     </environments>
     <mappers>
         <mapper resource="GroupMapper.xml"/>
-        <mapper resource="SubjectMapper.xml"/>
-        <mapper resource="TeacherMapper.xml"/>
     </mappers>
 </configuration>

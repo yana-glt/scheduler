@@ -2,11 +2,20 @@ package com.solvd.scheduler.terminal;
 
 import com.solvd.scheduler.model.Group;
 import com.solvd.scheduler.model.Subject;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class InfoFromDB {
+
+    public static int getHoursInGroupWithMaxHoursPerWeek(List<Group> groups) {
+        return groups.stream().map(p -> p.getSubjectsAsList().size()).max(Integer::compareTo).orElse(0);
+    }
+
+    public static int getHoursInGroupWithMinHoursPerWeek(List<Group> groups) {
+        return groups.stream().map(p -> p.getSubjectsAsList().size()).min(Integer::compareTo).orElse(0);
+    }
 
     public static void printDataAboutGroupsWithSubjects(List<Group> groupsAndTheirSubjectWithTimePerWeek) {
         System.out.println("Here you can see information about the number of study hours for each class per week:");
@@ -26,13 +35,5 @@ public class InfoFromDB {
         for (Group g : groups) {
             System.out.println(g.getName());
         }
-    }
-
-    public static int getHoursInGroupWithMaxHoursPerWeek(List<Group> groups) {
-        return groups.stream().map(p -> p.getSubjectsAsList().size()).max(Integer::compareTo).orElse(0);
-    }
-
-    public static int getHoursInGroupWithMinHoursPerWeek(List<Group> groups) {
-        return groups.stream().map(p -> p.getSubjectsAsList().size()).min(Integer::compareTo).orElse(0);
     }
 }

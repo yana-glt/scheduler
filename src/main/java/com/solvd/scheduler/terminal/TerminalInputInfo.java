@@ -1,20 +1,20 @@
-package com.solvd.scheduler.terminal.scanner;
+package com.solvd.scheduler.terminal;
 
 import java.util.List;
 import java.util.Scanner;
 
 import com.solvd.scheduler.exception.InputException;
 import com.solvd.scheduler.model.Group;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import static com.solvd.scheduler.Main.logger;
-import static com.solvd.scheduler.terminal.scanner.MinMaxPossibleNums.*;
+import static com.solvd.scheduler.terminal.TerminalUtils.*;
 import static com.solvd.scheduler.terminal.InfoFromDB.getHoursInGroupWithMaxHoursPerWeek;
 import static com.solvd.scheduler.terminal.InfoFromDB.getHoursInGroupWithMinHoursPerWeek;
 import static java.lang.System.in;
 
 public class TerminalInputInfo {
-    public static final int MAX_NUM_OF_SLOTS_PER_DAY = 8;
-    public static final int MAX_AMOUNT_OF_WORKING_DAYS_PER_WEEK = 5;
+    private final static Logger LOGGER = LogManager.getLogger(TerminalInputInfo.class);
     public static final int DAY_MAY_CONTAIN_A_MIN_OF_LESSONS = 1;
     public static int daysPerWeek;
     public static int maxLessonsPerDay;
@@ -32,7 +32,7 @@ public class TerminalInputInfo {
     }
 
     public static int getAmountOfWorkingDaysPerAWeek(int minDays, int maxDays, int maxHoursPerWeek, int minHoursPerWeek) throws InputException {
-        logger.debug("The number of working days is requested");
+        LOGGER.debug("The number of working days is requested");
         if (minDays == maxDays && maxHoursPerWeek != 0 && minHoursPerWeek != 0) {
             System.out.printf("""
                                         
@@ -54,16 +54,16 @@ public class TerminalInputInfo {
                     """, minDays, maxDays);
             Scanner scanner = new Scanner(System.in);
             if (!(scanner.hasNextInt())) {
-                logger.error(String.format("Exception: The entered data \"%s\" does not match the condition", scanner.next()));
+                LOGGER.error(String.format("Exception: The entered data \"%s\" does not match the condition", scanner.next()));
                 System.out.println("Exception: You entered invalid values. Try again!");
                 getAmountOfWorkingDaysPerAWeek(getMinAmountOfWorkingDaysPerWeek(maxHoursPerWeek), getMaxAmountOfWorkingDaysPerWeek(maxHoursPerWeek), maxHoursPerWeek, minHoursPerWeek);
             } else {
                 do {
                     int answer = scanner.nextInt();
                     try {
-                        ScannerUtils.checkCorrectValue(answer, minDays, maxDays);
+                        TerminalUtils.checkCorrectValue(answer, minDays, maxDays);
                         amountOfWorkingDaysPerAWeek = answer;
-                        logger.debug("Accepted number of working days is " + amountOfWorkingDaysPerAWeek);
+                        LOGGER.debug("Accepted number of working days is " + amountOfWorkingDaysPerAWeek);
                     } catch (InputException e) {
                         System.out.println("Problem occurred: Invalid characters were entered in the field");
                         getAmountOfWorkingDaysPerAWeek(getMinAmountOfWorkingDaysPerWeek(maxHoursPerWeek), getMaxAmountOfWorkingDaysPerWeek(maxHoursPerWeek), maxHoursPerWeek, maxHoursPerWeek);
@@ -75,7 +75,7 @@ public class TerminalInputInfo {
     }
 
     public static int getMinNumberOfLessonsPerDay(int lowerLimit, int upperLimit, int daysPerWeek, int minHoursPerWeek) throws InputException {
-        logger.debug("The number of MINIMUM lessons per day is requested");
+        LOGGER.debug("The number of MINIMUM lessons per day is requested");
         if (minHoursPerWeek <= 5 && Math.ceilDiv(minHoursPerWeek, daysPerWeek) == 1) {
             System.out.printf("""
 
@@ -97,16 +97,16 @@ public class TerminalInputInfo {
                         """, lowerLimit, upperLimit);
                 Scanner scan = new Scanner(in);
                 if (!(scan.hasNextInt())) {
-                    logger.error(String.format("Exception: The entered data \"%s\" does not match the condition\"", scan.next()));
+                    LOGGER.error(String.format("Exception: The entered data \"%s\" does not match the condition\"", scan.next()));
                     System.out.println("Exception: You entered invalid values. Try again!");
                     getMinNumberOfLessonsPerDay(getMinPossibleLessonsPerDayForMinValue(minHoursPerWeek), getMaxPossibleLessonsPerDayForMinValue(minHoursPerWeek), daysPerWeek, minHoursPerWeek);
                 } else {
                     do {
                         int answer = scan.nextInt();
                         try {
-                            ScannerUtils.checkCorrectValue(answer, lowerLimit, upperLimit);
+                            TerminalUtils.checkCorrectValue(answer, lowerLimit, upperLimit);
                             minNumberOfLessonsPerDay = answer;
-                            logger.debug("Accepted number of minimum lessons is " + minNumberOfLessonsPerDay);
+                            LOGGER.debug("Accepted number of minimum lessons is " + minNumberOfLessonsPerDay);
                         } catch (InputException e) {
                             System.out.println("Problem occurred: Invalid characters were entered in the field.");
                             getMinNumberOfLessonsPerDay(getMinPossibleLessonsPerDayForMinValue(minHoursPerWeek), getMaxPossibleLessonsPerDayForMinValue(minHoursPerWeek), daysPerWeek, minHoursPerWeek);
@@ -120,7 +120,7 @@ public class TerminalInputInfo {
     }
 
     public static int getMaxNumberOfLessonsPerDay(int lowerLimit, int upperLimit, int maxHoursPerWeek) {
-        logger.debug("The number of MAXIMUM lessons per day is requested");
+        LOGGER.debug("The number of MAXIMUM lessons per day is requested");
         if (lowerLimit == upperLimit) {
             System.out.printf("""
                     Maximum number of lessons per day required to allocate all lessons is %d.
@@ -135,15 +135,15 @@ public class TerminalInputInfo {
                         """, lowerLimit, upperLimit);
                 Scanner sc = new Scanner(in);
                 if (!(sc.hasNextInt())) {
-                    logger.error(String.format("Exception: The entered data \"%s\" does not match the condition\"", sc.next()));
+                    LOGGER.error(String.format("Exception: The entered data \"%s\" does not match the condition\"", sc.next()));
                     System.out.println("Exception: You entered invalid values. Try again!");
                     getMaxNumberOfLessonsPerDay(getMinPossibleLessonsPerDayForMaxValue(maxHoursPerWeek), getMaxPossibleLessonsPerDayForMaxValue(maxHoursPerWeek), maxHoursPerWeek);
                 } else {
                     int answer = Integer.parseInt(sc.next());
                     try {
-                        ScannerUtils.checkCorrectValue(answer, lowerLimit, upperLimit);
+                        TerminalUtils.checkCorrectValue(answer, lowerLimit, upperLimit);
                         maxNumberOfLessonsPerDay = answer;
-                        logger.debug("Accepted number of maximum lessons is " + maxNumberOfLessonsPerDay);
+                        LOGGER.debug("Accepted number of maximum lessons is " + maxNumberOfLessonsPerDay);
                     } catch (InputException e) {
                         System.out.println("Problem occurred: Invalid characters were entered in the field.");
                         getMaxNumberOfLessonsPerDay(getMinPossibleLessonsPerDayForMaxValue(maxHoursPerWeek), getMaxPossibleLessonsPerDayForMaxValue(maxHoursPerWeek), maxHoursPerWeek);

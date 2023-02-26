@@ -40,19 +40,6 @@ public class Subject{
         this.amountPerWeek = amountPerWeek;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (!(o instanceof Subject subject)) return false;
-//        return id == subject.id && amountPerWeek == subject.amountPerWeek && name.equals(subject.name)
-//                && Objects.equals(teacher, subject.teacher);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id, name, teacher, amountPerWeek);
-//    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

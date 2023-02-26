@@ -18,7 +18,7 @@ public class ChromosomeInput {
     public static int numSchoolDays;
     public static int minLessons;
     public static int maxLessons;
-    private final static Logger logger = LogManager.getLogger(ChromosomeInput.class);
+    private final static Logger LOGGER = LogManager.getLogger(ChromosomeInput.class);
 
     public ChromosomeInput(List<Group> groupList, int numSchoolDays, int minLessons, int maxLessons) {
         this.groups = groupList;
@@ -26,7 +26,7 @@ public class ChromosomeInput {
         ChromosomeInput.numSchoolDays = numSchoolDays;
         ChromosomeInput.minLessons = minLessons;
         ChromosomeInput.maxLessons = maxLessons;
-        logger.info(String.format("Collected chromosome info for %d groups with %d random timeslots [%d working days," +
+        LOGGER.info(String.format("Collected chromosome info for %d groups with %d random timeslots [%d working days," +
                         " min lessons per day: %d, max lessons per day: %d]",
                 groupList.size(), timeslots.size(), numSchoolDays, minLessons, maxLessons));
     }
@@ -49,7 +49,7 @@ public class ChromosomeInput {
                 id++;
             }
         }
-        logger.debug(String.format("Generated list of %d timeslots [for %d working days, number of school working hours: %d]",
+        LOGGER.debug(String.format("Generated list of %d timeslots [for %d working days, number of school working hours: %d]",
                 slots.size(), numberOfDays, SCHOOL_WORKING_HOURS));
         return slots;
     }
