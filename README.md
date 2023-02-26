@@ -35,7 +35,7 @@ you will get the opportunity to choose the type of information displayed in the 
 <img src="https://github.com/yana-glt/scheduler/blob/prerelease/src/main/resources/forReadme/ask_about_output.jpg" width="500">
 
 Depending on this choice, you can get the few options for displaying information on the screen: 
-`timetable for classes`, `timetable for teachers`, or `timetable for both categories`:
+`schedule for groups`, `schedule for teachers`, or `schedule for both categories`:
 
 <img src="https://github.com/yana-glt/scheduler/blob/prerelease/src/main/resources/forReadme/sample_output.PNG" width="700">
 
