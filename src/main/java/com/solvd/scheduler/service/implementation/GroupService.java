@@ -47,10 +47,10 @@ public class GroupService implements IGroupService {
 
     public static boolean isListOfGroupsEmpty(List<Group> groups) {
         if (groups.isEmpty()) {
-            logger.error("The resulting list of groups is empty.");
+            logger.debug("The resulting list of groups is empty.");
             return true;
         } else {
-            logger.info("Database contains groups.");
+            logger.debug("Database contains groups.");
             return false;
         }
     }
@@ -61,10 +61,8 @@ public class GroupService implements IGroupService {
         if (!GroupService.isListOfGroupsEmpty(groupsAndTheirSubjectWithTimePerWeek)) {
             int maxAmountOfHoursInDB = groupsAndTheirSubjectWithTimePerWeek.stream().map(p -> p.getSubjectsAsList().size()).max(Integer::compareTo).orElse(0);
             if (maxAmountOfHoursInDB == 0) {
-                logger.error("There are no subjects in the database in any of the groups " +
-                        "in which at least one subject had a number of hours greater than or equal to 1");
-                System.out.println("There are no subjects in the database in any of the groups " +
-                        "in which at least one subject had a number of hours greater than or equal to 1");
+                logger.error("None of subjects in the database has a number of hours greater than or equal to 1");
+                System.out.println("None of subjects in the database has a number of hours greater than or equal to 1");
                 System.exit(-1);
             } else if (maxAmountOfHoursInDB <= 40) {
                 InfoFromDB.printDataAboutGroupsWithSubjects(groupsAndTheirSubjectWithTimePerWeek);
@@ -82,7 +80,7 @@ public class GroupService implements IGroupService {
                 logger.error("There is not enough data in the database for scheduling. Subjects for groups are not specified.");
                 System.out.println("There is not enough data in the database for scheduling. Subjects for groups are not specified." +
                         "\nPlease add subjects for the groups below and try again.");
-                InfoFromDB.printDataAboutGroupsWithoutSubjects(groupsWithoutSubjects);
+                InfoFromDB.printDataAboutGroupsName(groupsWithoutSubjects);
                 System.exit(-1);
             } else {
                 logger.error("There is no data in the database for scheduling.");

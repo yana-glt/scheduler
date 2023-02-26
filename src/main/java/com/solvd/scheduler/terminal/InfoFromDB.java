@@ -22,7 +22,7 @@ public class InfoFromDB {
         }
     }
 
-    public static void printDataAboutGroupsWithoutSubjects(List<Group> groups) {
+    public static void printDataAboutGroupsName(List<Group> groups) {
         for (Group g : groups) {
             System.out.println(g.getName());
         }

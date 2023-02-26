@@ -19,17 +19,20 @@ import java.util.stream.Collectors;
 public class TerminalOutputInfo {
     private final static Logger logger = LogManager.getLogger(TerminalOutputInfo.class);
 
-    public static void presentOutput(Individual individual) {
-        if (individual.getMandatoryFitness() == 1) {
-            System.out.println("The schedule for all groups was drawn up. " +
-                    "\nPlease enter :" +
-                    "\n1 if you want to get the schedule for all groups" +
-                    "\n2 if you want to get the schedule for all teachers" +
-                    "\n3 if you want to get the schedule for all groups and teachers");
-            chooseOption(individual);
+    public static void presentOutput(List<Lesson> lessons) {
+        if (lessons != null && lessons.size() > 0) {
+            Individual individual = new Individual(lessons);
+            if (individual.getMandatoryFitness() == 1) {
+                System.out.println("The schedule for all groups was drawn up. " +
+                        "\nPlease enter :" +
+                        "\n1 if you want to get the schedule for all groups" +
+                        "\n2 if you want to get the schedule for all teachers" +
+                        "\n3 if you want to get the schedule for all groups and teachers");
+                chooseOption(individual);
+            }
         } else {
             System.out.println("The schedule for all groups cannot be drawn up without conflicts. " +
-                    "\nPlease try again by changing your input options");
+                    "\nPlease try again by changing your input options or data in DB");
         }
     }
 
@@ -57,7 +60,7 @@ public class TerminalOutputInfo {
                     default:
                         logger.debug(String.format("Incorrect user input: [%s] does not match the condition", input));
                         System.out.println("The entered data does not match the condition. Please try again");
-                        presentOutput(ind);
+                        presentOutput(ind.getChromosome());
                         break;
                 }
             }

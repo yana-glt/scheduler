@@ -1,15 +1,13 @@
 package com.solvd.scheduler;
 
 import com.solvd.scheduler.algorithm.IScheduleGenerate;
-import com.solvd.scheduler.algorithm.Individual;
 import com.solvd.scheduler.algorithm.ScheduleGenerator;
 import com.solvd.scheduler.model.Group;
 import com.solvd.scheduler.model.Lesson;
 import com.solvd.scheduler.service.implementation.GroupService;
-import com.solvd.scheduler.terminal.TerminalOutputInfo;
+//import com.solvd.scheduler.terminal.TerminalOutputInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.util.List;
 
 public class Main {
@@ -23,10 +21,6 @@ public class Main {
         //int[] ints = TerminalInputInfo.openScanner(groups);
         //IScheduleGenerate sg = new ScheduleGenerator(groups, ints[0], ints[1], ints[2]);
         //List<Lesson> lessons = sg.compute();
-        //if (lessons != null && lessons.size() > 0) {
-        //    TerminalOutputInfo.presentOutput(new Individual(lessons));
-        //}else{
-        //    System.exit(-1);
-        //}
+        //TerminalOutputInfo.presentOutput(lessons);
     }
 }
