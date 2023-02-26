@@ -3,6 +3,7 @@ package com.solvd.scheduler.dao.interfaces;
 import com.solvd.scheduler.model.Subject;
 
 public interface ISubjectDAO extends IBaseDAO<Subject>{
+
     @Override
     Subject getRecordById(long id);
 
@@ -14,4 +15,5 @@ public interface ISubjectDAO extends IBaseDAO<Subject>{
 
     @Override
     void deleteRecord(Subject entity);
+
 }

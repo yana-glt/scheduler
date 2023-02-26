@@ -4,6 +4,7 @@ import com.solvd.scheduler.model.Group;
 import java.util.List;
 
 public interface IGroupDAO extends IBaseDAO<Group>{
+
     @Override
     Group getRecordById(long id);
 
@@ -17,4 +18,6 @@ public interface IGroupDAO extends IBaseDAO<Group>{
     void deleteRecord(Group entity);
 
     List<Group> getGroupsWithSubjects();
+
+    List<Group> getGroupsWithoutSubjects();
 }

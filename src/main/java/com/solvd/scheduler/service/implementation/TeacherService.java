@@ -10,30 +10,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class TeacherService  implements ITeacherService {
-        private final static Logger logger = LogManager.getLogger(TeacherService.class);
-        private static final SqlSessionFactory SESSION_FACTORY = MyBatisDAOFactory.getSqlSessionFactory();
+    private final static Logger logger = LogManager.getLogger(TeacherService.class);
+    private static final SqlSessionFactory SESSION_FACTORY = MyBatisDAOFactory.getSqlSessionFactory();
 
-        @Override
-        public Teacher getRecordById(long id) {
-            try(SqlSession sqlSession = SESSION_FACTORY.openSession()) {
-                ITeacherDAO teacherDAO = sqlSession.getMapper(ITeacherDAO.class);
-                Teacher teacher = teacherDAO.getRecordById(1);
-                return teacher;
-            }
+    @Override
+    public Teacher getRecordById(long id) {
+        try(SqlSession sqlSession = SESSION_FACTORY.openSession()) {
+            ITeacherDAO teacherDAO = sqlSession.getMapper(ITeacherDAO.class);
+            Teacher teacher = teacherDAO.getRecordById(1);
+            logger.info("The Teacher class object with id " + id + "was retrieved from the database");
+            return teacher;
         }
-
-        @Override
-        public void insertRecord(Teacher entity) {
-
-        }
-
-        @Override
-        public void updateRecord(Teacher entity) {
-
-        }
-
-        @Override
-        public void deleteRecord(Teacher entity) {
-
-        }
+    }
 }
