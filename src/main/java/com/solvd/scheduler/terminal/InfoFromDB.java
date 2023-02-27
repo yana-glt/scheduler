@@ -24,10 +24,10 @@ public class InfoFromDB {
             HashMap<Subject, Integer> subjects = g.getSubjectAmountPerWeek();
             int count = 0;
             for (Map.Entry<Subject, Integer> item : subjects.entrySet()) {
-                System.out.print(String.format("%s - %s; ", item.getKey().getName(), item.getValue()));
+                System.out.printf("%s - %s; ", item.getKey().getName(), item.getValue());
                 count += item.getValue();
             }
-            System.out.println(String.format("total: %s", count));
+            System.out.printf("total: %s%n", count);
         }
     }
 

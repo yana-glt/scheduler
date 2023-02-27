@@ -1,6 +1,5 @@
 package com.solvd.scheduler.terminal;
 
-import com.solvd.scheduler.algorithm.ChromosomeInput;
 import com.solvd.scheduler.exception.InputException;
 
 import java.io.IOException;
