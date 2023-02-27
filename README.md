@@ -43,4 +43,4 @@ If, based on the specified conditions, the Application failed to create a schedu
 
 <img src="https://github.com/yana-glt/scheduler/blob/prerelease/src/main/resources/forReadme/message.PNG" width="500">
 
-:arrow_up: [up](https://github.com/yana-glt/scheduler/edit/prerelease/README.md)
+:arrow_up: [up]([https://github.com/yana-glt/scheduler/edit/prerelease/README.md](https://github.com/yana-glt/scheduler/blob/prerelease/README.md))
