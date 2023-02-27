@@ -55,7 +55,7 @@ public class TerminalInputInfo {
             Scanner scanner = new Scanner(System.in);
             if (!(scanner.hasNextInt())) {
                 LOGGER.error(String.format("Exception: The entered data \"%s\" does not match the condition", scanner.next()));
-                System.out.println("Exception: You entered invalid values. Try again!");
+                System.out.println("You entered invalid value. Try again!");
                 getAmountOfWorkingDaysPerAWeek(getMinAmountOfWorkingDaysPerWeek(maxHoursPerWeek), getMaxAmountOfWorkingDaysPerWeek(maxHoursPerWeek), maxHoursPerWeek, minHoursPerWeek);
             } else {
                 do {
@@ -65,7 +65,7 @@ public class TerminalInputInfo {
                         amountOfWorkingDaysPerAWeek = answer;
                         LOGGER.debug("Accepted number of working days is " + amountOfWorkingDaysPerAWeek);
                     } catch (InputException e) {
-                        System.out.println("Problem occurred: Invalid characters were entered in the field");
+                        System.out.println("You entered invalid value. Try again!");
                         getAmountOfWorkingDaysPerAWeek(getMinAmountOfWorkingDaysPerWeek(maxHoursPerWeek), getMaxAmountOfWorkingDaysPerWeek(maxHoursPerWeek), maxHoursPerWeek, maxHoursPerWeek);
                     }
                 } while (amountOfWorkingDaysPerAWeek == 0);
@@ -98,7 +98,7 @@ public class TerminalInputInfo {
                 Scanner scan = new Scanner(in);
                 if (!(scan.hasNextInt())) {
                     LOGGER.error(String.format("Exception: The entered data \"%s\" does not match the condition\"", scan.next()));
-                    System.out.println("Exception: You entered invalid values. Try again!");
+                    System.out.println("You entered invalid value. Try again!");
                     getMinNumberOfLessonsPerDay(getMinPossibleLessonsPerDayForMinValue(minHoursPerWeek), getMaxPossibleLessonsPerDayForMinValue(minHoursPerWeek), daysPerWeek, minHoursPerWeek);
                 } else {
                     do {
@@ -108,7 +108,7 @@ public class TerminalInputInfo {
                             minNumberOfLessonsPerDay = answer;
                             LOGGER.debug("Accepted number of minimum lessons is " + minNumberOfLessonsPerDay);
                         } catch (InputException e) {
-                            System.out.println("Problem occurred: Invalid characters were entered in the field.");
+                            System.out.println("You entered invalid value. Try again!");
                             getMinNumberOfLessonsPerDay(getMinPossibleLessonsPerDayForMinValue(minHoursPerWeek), getMaxPossibleLessonsPerDayForMinValue(minHoursPerWeek), daysPerWeek, minHoursPerWeek);
                         }
                     }
@@ -136,7 +136,7 @@ public class TerminalInputInfo {
                 Scanner sc = new Scanner(in);
                 if (!(sc.hasNextInt())) {
                     LOGGER.error(String.format("Exception: The entered data \"%s\" does not match the condition\"", sc.next()));
-                    System.out.println("Exception: You entered invalid values. Try again!");
+                    System.out.println("You entered invalid value. Try again!");
                     getMaxNumberOfLessonsPerDay(getMinPossibleLessonsPerDayForMaxValue(maxHoursPerWeek), getMaxPossibleLessonsPerDayForMaxValue(maxHoursPerWeek), maxHoursPerWeek);
                 } else {
                     int answer = Integer.parseInt(sc.next());
@@ -145,7 +145,7 @@ public class TerminalInputInfo {
                         maxNumberOfLessonsPerDay = answer;
                         LOGGER.debug("Accepted number of maximum lessons is " + maxNumberOfLessonsPerDay);
                     } catch (InputException e) {
-                        System.out.println("Problem occurred: Invalid characters were entered in the field.");
+                        System.out.println("You entered invalid value. Try again!");
                         getMaxNumberOfLessonsPerDay(getMinPossibleLessonsPerDayForMaxValue(maxHoursPerWeek), getMaxPossibleLessonsPerDayForMaxValue(maxHoursPerWeek), maxHoursPerWeek);
                     }
                 }

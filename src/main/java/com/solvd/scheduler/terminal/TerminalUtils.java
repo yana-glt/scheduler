@@ -5,38 +5,38 @@ import com.solvd.scheduler.exception.InputException;
 
 import java.io.IOException;
 
+import static com.solvd.scheduler.algorithm.ChromosomeInput.MAX_SCHOOL_WORKING_DAYS;
+import static com.solvd.scheduler.algorithm.ChromosomeInput.SCHOOL_WORKING_HOURS;
+import static com.solvd.scheduler.terminal.TerminalInputInfo.*;
+
 public class TerminalUtils {
 
     public static int getMinAmountOfWorkingDaysPerWeek(int hoursPerWeek) throws InputException {
-        return Math.ceilDiv(hoursPerWeek, ChromosomeInput.SCHOOL_WORKING_HOURS);
+        return Math.ceilDiv(hoursPerWeek, SCHOOL_WORKING_HOURS);
     }
 
     public static int getMaxAmountOfWorkingDaysPerWeek(int hoursPerWeek) {
         if (hoursPerWeek <= 5) {
             return hoursPerWeek;
         } else {
-            return ChromosomeInput.MAX_SCHOOL_WORKING_DAYS;
+            return MAX_SCHOOL_WORKING_DAYS;
         }
     }
 
     public static int getMinPossibleLessonsPerDayForMinValue(int minHoursPerWeek) {
-        return Math.max(minHoursPerWeek - ((TerminalInputInfo.daysPerWeek - 1) * ChromosomeInput.SCHOOL_WORKING_HOURS), TerminalInputInfo.DAY_MAY_CONTAIN_A_MIN_OF_LESSONS);
+        return Math.max(minHoursPerWeek - ((daysPerWeek - 1) * SCHOOL_WORKING_HOURS), DAY_MAY_CONTAIN_A_MIN_OF_LESSONS);
     }
 
     public static int getMaxPossibleLessonsPerDayForMinValue(int minHoursPerWeek) throws InputException {
-        return Math.max(Math.floorDiv(minHoursPerWeek, TerminalInputInfo.daysPerWeek), TerminalInputInfo.minLessonsPerDay);
+        return Math.max(Math.floorDiv(minHoursPerWeek, daysPerWeek), minLessonsPerDay);
     }
 
     public static int getMinPossibleLessonsPerDayForMaxValue(int maxHoursPerWeek) {
-        return Math.ceilDiv(maxHoursPerWeek, TerminalInputInfo.daysPerWeek);
+        return Math.ceilDiv(maxHoursPerWeek, daysPerWeek);
     }
 
     public static int getMaxPossibleLessonsPerDayForMaxValue(int maxHoursPerWeek) {
-        if (maxHoursPerWeek <= ChromosomeInput.SCHOOL_WORKING_HOURS & maxHoursPerWeek != 0) {
-            return maxHoursPerWeek - ((TerminalInputInfo.daysPerWeek - 1) * TerminalInputInfo.minLessonsPerDay);
-        } else {
-            return Math.min(maxHoursPerWeek - ((TerminalInputInfo.daysPerWeek - 1) * TerminalInputInfo.minLessonsPerDay), ChromosomeInput.SCHOOL_WORKING_HOURS);
-        }
+            return Math.min(maxHoursPerWeek - ((daysPerWeek - 1) * minLessonsPerDay), SCHOOL_WORKING_HOURS);
     }
 
     public static void checkCorrectValue(int answer, int comparativeNumber1, int comparativeNumber2) throws InputException {
