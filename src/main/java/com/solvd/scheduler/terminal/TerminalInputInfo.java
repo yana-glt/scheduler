@@ -123,8 +123,10 @@ public class TerminalInputInfo {
         LOGGER.debug("The number of MAXIMUM lessons per day is requested");
         if (lowerLimit == upperLimit) {
             System.out.printf("""
+                    
                     Maximum number of lessons per day required to allocate all lessons is %d.
                     So max number of lessons is set to %d by default
+                    
                     """, upperLimit, upperLimit);
             minNumberOfLessonsPerDay = upperLimit;
         } else {
