@@ -9,12 +9,13 @@ The implementation of the genetic algorithm allows you:
 - Prevent or at least minimize the number of gaps in the schedule
 - Distribute the load evenly over the days of the week
 
+## Quick Start:
+
 **Prerequisites:** <br> 
 Intellij Idea IDE  <br> 
 Java 18 and above <br> 
 MySQL Workbench 
 
-## Quick Start:
 - [ ] Clone this repository.
 - [ ] Open package with project in your IDE
 - [ ] Import [scheduler_create_script.sql](https://github.com/yana-glt/scheduler/blob/prerelease/src/main/resources/db/scheduler_create_script.sql) file in your database (here you can see the [eer.diagram](https://github.com/yana-glt/scheduler/blob/prerelease/src/main/resources/db/scheduler_eer_diagram.png))
