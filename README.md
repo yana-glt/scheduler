@@ -1,5 +1,6 @@
-# The Scheduler
 
+# The Scheduler
+<a name="The_Scheduler"></a> 
 The Scheduler is a school timetable generator.<br>  
 It creates schedule for both classes and teachers, making the most convenient arrangement of subjects in the educational grid.
 
@@ -43,4 +44,4 @@ If, based on the specified conditions, the Application failed to create a schedu
 
 <img src="https://github.com/yana-glt/scheduler/blob/prerelease/src/main/resources/forReadme/message.PNG" width="500">
 
-:arrow_up: [up](https://github.com/yana-glt/scheduler/blob/prerelease/README.md)
+:arrow_up: [up](#The_Scheduler)
