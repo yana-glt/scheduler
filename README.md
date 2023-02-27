@@ -1,5 +1,5 @@
-
-# The Scheduler <a name="The_Scheduler"></a> 
+<a name="The_Scheduler"></a> 
+# The Scheduler 
 
 The Scheduler is a school timetable generator.<br>  
 It creates schedule for both classes and teachers, making the most convenient arrangement of subjects in the educational grid.
