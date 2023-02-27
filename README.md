@@ -42,3 +42,5 @@ Depending on this choice, you can get the few options for displaying information
 If, based on the specified conditions, the Application failed to create a schedule, you will receive a corresponding message:
 
 <img src="https://github.com/yana-glt/scheduler/blob/prerelease/src/main/resources/forReadme/message.PNG" width="500">
+
+:arrow_up: [up](https://github.com/yana-glt/scheduler/edit/prerelease/README.md)
